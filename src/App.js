@@ -19,11 +19,9 @@ class App extends Component {
 		};
 	}
 
-	componentDidMount() {
-		console.log("component did mount");
-
+	componentDidMount() {		
 		if (this.state.accounts.length == 0) {
-			this.handleRefresh();
+			this.refreshAccountList()
 		}
 	}
 
@@ -31,69 +29,75 @@ class App extends Component {
 		if (this.state.accounts.length == 0) {
 			return (
 				<div>
-        			Loading...
+					<img src="./loading.gif" className="Loading"/>
 				</div>
-				);
+			);
 		} else {
 			return (			
-				<div>
+				<div className="AccountsTable">
 					{this.renderAccountList()}
 				</div>
-				)
+			)
 		}
 	}
 
 	renderAccountList() {  
 		return (
-			<AccountsTable accounts={this.state.accounts}/>
-			)
+			<div>
+				<b>Compound Accounts</b>
+				<AccountsTable accounts={this.state.accounts}/>
+			</div>
+		)
 	}
 
-	handleRefresh () {    
-		console.log(sampleJson['account_values']);
+	refreshAccountList () {    
+		console.log("refreshing accounts");
 
-		var newAccounts = [];
+		var URL = 'https://api.compound.finance/api/risk/v1/get_account_values';
 
-		sampleJson['account_values'].forEach((accountData) => {
-			var account = {
-				address : accountData.address,
-
-				totalEthBorrow : accountData.total_borrow_value_in_eth.value,
-
-				totalEthSupply : accountData.total_supply_value_in_eth.value,
-
-				blockUpdated : accountData.block_updated
+		axios({
+			method: 'post',
+			url: URL,
+			headers : {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json'
+				// ,'compound-api-key' : 'xxx'
+			},
+			data: {
+				'page_size' : 100,
+				'page_number' : 1,
+				'min_borrow_value_in_eth' : {
+					'value' : '50000000000000000'
+				},
+				'max_collateral_ratio' : {
+					'value' : '5'
+				}
 			}
+		}).then(response => {
+			console.log(response);
 
-			newAccounts.push(account);
+			var newAccounts = [];
+
+			response.data.account_values.forEach((accountData) => {
+				var account = {
+					address : accountData.address,
+
+					totalEthBorrow : accountData.total_borrow_value_in_eth.value,
+
+					totalEthSupply : accountData.total_supply_value_in_eth.value,
+
+					blockUpdated : accountData.block_updated
+				}
+				newAccounts.push(account);
+			});
 
 			this.setState({
 				accounts : newAccounts
-			});      
+			});
+		}).catch((error) => {
+			console.error(error);
 		});
-
-  //   var URL = 'https://api.compound.finance/api/risk/v1/get_account_values';
-
-  //   axios({
-  //     method: 'post',
-  //     url: URL,
-
-  //     data: {
-  //      'page_size' : 100,
-  //      'page_number' : 1,
-  //      'min_borrow_value_in_eth' : {
-  //       'value' : '500000000000000000'
-  //     },
-  //     'max_collateral_ratio' : {
-  //       'value' : '5'
-  //     }
-  //   }
-  // }).then(response => {
-  //   console.log(response.data);
-  // }).catch((error) => {
-  //   console.log(error);
-  // });
-}
+	}
 }
 
 export default App;

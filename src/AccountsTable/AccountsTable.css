@@ -1,3 +1,29 @@
+.AccountsTable {
+	
+}
+
 .right {
   text-align: right;
+}
+
+.liquidateButton {	
+    width:100%; 
+
+    padding: 2px;
+    text-align: center;
+    
+    display: inline-block;
+  	font-size: 16px;
+}
+
+div.rt-tr {
+  align-items: center;
+}
+
+.ReactTable {
+  margin-top:20px;
+  margin-left:20px;
+  height: calc(100% - 60px); /* Full-height: remove this if you want "auto" height */
+  width: calc(100% - 40px); /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
 }
