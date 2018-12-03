@@ -78,7 +78,7 @@ function AccountsTableRow(props) {
           accessor : 'address',
           maxWidth: 750,
           Cell: row => (
-              <a href='https://etherscan.io/address' target='_blank'>{row.value}</a>            
+              <a href={'https://etherscan.io/address/' + row.value} target='_blank'>{row.value}</a>            
           )
 
         },
