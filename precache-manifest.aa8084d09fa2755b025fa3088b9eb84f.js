@@ -68,7 +68,7 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/css/1.4f81fb55.chunk.css"
   },
   {
-    "revision": "b0e48682c8086a88d240d10779981cbb",
+    "revision": "a03d90feae5fce5debcc1a9afbea544b",
     "url": "/compound-liquidator/index.html"
   }
 ];
