@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 
-import './App.css';
 import AccountsTable from './AccountsTable/AccountsTable.js';
 
-import { Web3Provider } from 'react-web3';
-
 import axios from 'axios'
+
+import { useWeb3Context, useAccountBalance } from 'web3-react/hooks'
+
+import './App.css';
 
 import sampleJson from './samplejson.json'
 
@@ -13,92 +14,86 @@ class App extends Component {
 	constructor() {
 		super();
 
-    this.state = {
-      accounts : []
-    };
-
-
+		this.state = {
+			accounts : []
+		};
 	}
 
-  componentDidMount() {
+	componentDidMount() {
+		console.log("component did mount");
 
-  }
+		if (this.state.accounts.length == 0) {
+			this.handleRefresh();
+		}
+	}
 
-  render() {
-    if (this.state.accounts.length == 0) {
-      return (
-        <div className="App">
-        	<button className='button' onClick={() => {this.handleRefresh()}}>Refresh</button>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          {this.renderAccountList()}
-        </div>
-      )
-    }
-  }
+	render() {
+		if (this.state.accounts.length == 0) {
+			return (
+				<div>
+        			Loading...
+				</div>
+				);
+		} else {
+			return (			
+				<div>
+					{this.renderAccountList()}
+				</div>
+				)
+		}
+	}
 
-  renderAccountList() {  
-    return (
-      <AccountsTable/>      
-    )
-  }
+	renderAccountList() {  
+		return (
+			<AccountsTable accounts={this.state.accounts}/>
+			)
+	}
 
-  handleRefresh () {    
-    console.log(sampleJson['account_values']);
-    
-    var newAccounts = [];
+	handleRefresh () {    
+		console.log(sampleJson['account_values']);
 
-    sampleJson['account_values'].forEach((accountData) => {
-      var account = {
-        address : accountData.address,
+		var newAccounts = [];
 
-        totalEthBorrow : accountData.total_borrow_value_in_eth,
+		sampleJson['account_values'].forEach((accountData) => {
+			var account = {
+				address : accountData.address,
 
-        totalEthSupply : accountData.total_supply_value_in_eth
-      }
+				totalEthBorrow : accountData.total_borrow_value_in_eth.value,
 
-      newAccounts.push(account);
-      
-      this.setState({
-        accounts : newAccounts
-      });      
-    });
-    
-    // var URL = 'https://api.compound.finance/api/risk/v1/get_top_account_values'
+				totalEthSupply : accountData.total_supply_value_in_eth.value,
 
-    // axios.get(URL, { 
-    //   headers: { 
-    //       'Accept' : 'application/json'
+				blockUpdated : accountData.block_updated
+			}
 
-          
-          
-    //   } 
-    // }).then(response => {
-    //   var newAccounts = [];
+			newAccounts.push(account);
 
-    //   response.data.account_values.forEach((accountData) => {
-        
-    //     var account = {
-    //       address : accountData.address,
+			this.setState({
+				accounts : newAccounts
+			});      
+		});
 
-    //       totalEthBorrow : accountData.total_borrow_value_in_eth,
+  //   var URL = 'https://api.compound.finance/api/risk/v1/get_account_values';
 
-    //       totalEthSupply : accountData.total_supply_value_in_eth
-    //     }
+  //   axios({
+  //     method: 'post',
+  //     url: URL,
 
-    //     newAccounts.push(account);
-    //   });
-
-    //   this.setState({
-    //     accounts : newAccounts
-    //   }); 
-    // }).catch((error) => {
-    //     console.log('error ' + error);
-    // });
-  }
+  //     data: {
+  //      'page_size' : 100,
+  //      'page_number' : 1,
+  //      'min_borrow_value_in_eth' : {
+  //       'value' : '500000000000000000'
+  //     },
+  //     'max_collateral_ratio' : {
+  //       'value' : '5'
+  //     }
+  //   }
+  // }).then(response => {
+  //   console.log(response.data);
+  // }).catch((error) => {
+  //   console.log(error);
+  // });
+}
 }
 
 export default App;

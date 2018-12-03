@@ -1,11 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import Web3Provider from 'web3-react'
+
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+function AppWrapper () {
+  return (  	
+    <Web3Provider>
+      <App/>
+    </Web3Provider>
+  )
+}
+
+const rootElement = document.getElementById("root")
+ReactDOM.render(<AppWrapper />, rootElement);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
