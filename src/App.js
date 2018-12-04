@@ -14,8 +14,15 @@ import sampleJson from './samplejson.json'
 function GoBackFromAddressInspector(app) {
 	app.setState({
 		inspected_address : "",
+		
+		borrow_balances : {},
+		supply_balances : {},
+
+		pending_balances : {}, // what we're currently fetching
+
 		asset_repay : "",
 		asset_collect : ""
+
 	});
 }
 
@@ -46,7 +53,12 @@ class App extends Component {
 
 		this.state = {
 			accounts : [],
+			
 			inspected_address : "",
+			borrow_balances : {},
+			supply_balances : {},
+			pending_balances : {},
+
 			asset_repay : "",
 			asset_collect : ""
 		};
@@ -58,8 +70,7 @@ class App extends Component {
 		}
 	}
 
-	render() {
-		console.log(this.state.asset_repay + " " + this.state.asset_collect);
+	render() {		
 		if (this.state.inspected_address.length > 0) {
 			return (
 				<div className="AddressInspector">
@@ -87,33 +98,35 @@ class App extends Component {
 	}
 
 	refreshAccountList () {
-		ParseAccountDataResponse(sampleJson, this);
+		// ParseAccountDataResponse(sampleJson, this);
 	
-		// var URL = 'https://api.compound.finance/api/risk/v1/get_account_values';
+		var URL = 'https://api.compound.finance/api/risk/v1/get_account_values';
 
-		// axios({
-		// 	method: 'post',
-		// 	url: URL,
-		// 	headers : {
-		// 		'Accept' : 'application/json',
-		// 		'Content-Type' : 'application/json'
-		// 		// ,'compound-api-key' : 'xxx'
-		// 	},
-		// 	data: {
-		// 		'page_size' : 100,
-		// 		'page_number' : 1,
-		// 		'min_borrow_value_in_eth' : {
-		// 			'value' : '50000000000000000'
-		// 		},
-		// 		'max_collateral_ratio' : {
-		// 			'value' : '5'
-		// 		}
-		// 	}
-		// }).then(response => {
-		// 	console.log(response);
-		// }).catch((error) => {
-		// 	console.error(error);
-		// });
+		axios({
+			method: 'post',
+			url: URL,
+			headers : {
+				'Accept' : 'application/json',
+				'Content-Type' : 'application/json'
+				// ,'compound-api-key' : 'xxx'
+			},
+			data: {
+				'page_size' : 100,
+				'page_number' : 1,
+				'min_borrow_value_in_eth' : {
+					'value' : '50000000000000000'
+				},
+				'max_collateral_ratio' : {
+					'value' : '5'
+				}
+			}
+		}).then(response => {
+			console.log(response);
+			
+			ParseAccountDataResponse(response.data, this);
+		}).catch((error) => {
+			console.error(error);
+		});
 	}
 }
 

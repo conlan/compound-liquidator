@@ -22,11 +22,11 @@ function AddressInspector (props) {
     return (
       <div>        
         <p>Choose an asset to receive at discount:</p>
-        <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>
-        <br/>
+        <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>        
 
         <p>Choose an asset to repay:</p>
         <BalanceTable app={app} balanceType="Borrowed" stateProperty="asset_repay"/>
+        <br/>
 
         <button className="LiquidateButton" disabled={!canLiquidate}>Liquidate</button>
       </div>

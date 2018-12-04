@@ -56,7 +56,7 @@ function AccountsTable (props) {
 
       // var liquidateStatus = (ratio >= minCollateralRatio) ? '0' : '1';
 
-      var account = {
+      var accountObj = {
         address : account.address,
         supply : supplyAmount,
         borrow : borrowAmount,
@@ -64,7 +64,7 @@ function AccountsTable (props) {
         state : state,
         block : account.blockUpdated
       }
-      data.push(account);
+      data.push(accountObj);
     });
 
     const columns = [
