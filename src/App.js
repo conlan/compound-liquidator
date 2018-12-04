@@ -13,11 +13,13 @@ import sampleJson from './samplejson.json'
 
 function GoBackFromAddressInspector(app) {
 	app.setState({
-		inspected_address : ""
+		inspected_address : "",
+		asset_repay : "",
+		asset_collect : ""
 	});
 }
 
-function HandleAccountDataResponse(json, app) {
+function ParseAccountDataResponse(json, app) {
 	var newAccounts = [];
 
 	json.account_values.forEach((accountData) => {
@@ -44,7 +46,9 @@ class App extends Component {
 
 		this.state = {
 			accounts : [],
-			inspected_address : ""
+			inspected_address : "",
+			asset_repay : "",
+			asset_collect : ""
 		};
 	}
 
@@ -55,12 +59,13 @@ class App extends Component {
 	}
 
 	render() {
+		console.log(this.state.asset_repay);
 		if (this.state.inspected_address.length > 0) {
 			return (
 				<div className="AddressInspector">
 				<button onClick={() => GoBackFromAddressInspector(this)}>Back</button>
-					<b>Liquidate: {this.state.inspected_address}</b>
-					<AddressInspector/>
+					<b>Account: {this.state.inspected_address}</b>
+					<AddressInspector app={this}/>
 				</div>
 			)
 		} else {
@@ -81,9 +86,8 @@ class App extends Component {
 		}
 	}
 
-	refreshAccountList () {    
-		console.log("refreshing accounts");
-		HandleAccountDataResponse(sampleJson, this);
+	refreshAccountList () {
+		ParseAccountDataResponse(sampleJson, this);
 	
 		// var URL = 'https://api.compound.finance/api/risk/v1/get_account_values';
 

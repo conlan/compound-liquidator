@@ -54,7 +54,7 @@ function AccountsTable (props) {
 
       var ratioDisplay = (ratio * 100).toFixed(1) + "%";
 
-      var liquidateStatus = (ratio >= minCollateralRatio) ? '0' : '1';
+      // var liquidateStatus = (ratio >= minCollateralRatio) ? '0' : '1';
 
       var account = {
         address : account.address,
@@ -62,8 +62,7 @@ function AccountsTable (props) {
         borrow : borrowAmount,
         ratio : ratioDisplay,
         state : state,
-        block : account.blockUpdated,
-        liquidate : liquidateStatus
+        block : account.blockUpdated
       }
       data.push(account);
     });
@@ -119,10 +118,10 @@ function AccountsTable (props) {
         accessor : 'liquidate',
         maxWidth: 200,
         Cell: row => (
-        <button className="liquidateButton" disabled={row.value === '0' ? true : false} 
+        <button className="InspectButton" 
         onClick={
           () => InitiateLiquidation(row.row.address)
-        }>Liquidate</button>
+        }>Inspect</button>
         )
       }
       ];

@@ -1,0 +1,9 @@
+.LiquidateButton {
+	width:200px; 
+
+	margin-left: calc(100% - 220px);
+
+    padding: 10px;
+    
+  	font-size: 16px;
+}
