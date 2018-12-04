@@ -14,20 +14,21 @@ function AddressInspector (props) {
 
     var canLiquidate = false;
 
-    // check if both repay and collect assets are set
+    // only enable liquidate button if both asset to repay and collect have been set
     if ((app.state.asset_repay.length > 0) && (app.state.asset_collect.length > 0)) {
       canLiquidate = true;
     }
 
     return (
       <div>
-        <p>Choose asset to repay on behalf of borrower:</p>
-        <BalanceTable app={app} balance_type="Borrow"/>
+        <p>Choose an asset to repay:</p>
+        <BalanceTable app={app} balanceType="Borrow" stateProperty="asset_repay"/>
 
-        <p>Choose asset to receive at discount (5%):</p>
-        <BalanceTable app={app} balance_type="Collateral"/>
+        <p>Choose an asset to receive at discount:</p>
+        <BalanceTable app={app} balanceType="Collateral" stateProperty="asset_collect"/>
         <br/>
-        <button className='LiquidateButton' disabled={!canLiquidate}>Liquidate</button>
+
+        <button className="LiquidateButton" disabled={!canLiquidate}>Liquidate</button>
       </div>
 
     )

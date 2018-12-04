@@ -59,7 +59,7 @@ class App extends Component {
 	}
 
 	render() {
-		console.log(this.state.asset_repay);
+		console.log(this.state.asset_repay + " " + this.state.asset_collect);
 		if (this.state.inspected_address.length > 0) {
 			return (
 				<div className="AddressInspector">

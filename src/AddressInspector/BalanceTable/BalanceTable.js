@@ -7,7 +7,8 @@ import "./BalanceTable.css"
 function BalanceTable (props) { 
   let app = props.app;
 
-  var balanceType = props.balance_type;
+  var balanceType = props.balanceType;
+  var stateProperty = props.stateProperty;
 
   var data = [];
 
@@ -75,12 +76,23 @@ function BalanceTable (props) {
       accessor : 'liquidateAsset',
       maxWidth: 100,
       Cell: row => (
-        <input type="radio" checked={app.state.asset_repay === row.value}
+        <input type="radio" checked={app.state[stateProperty] === row.value}
+        onClick={
+          () => {
+            if (stateProperty === 'asset_repay') {
+              app.setState({
+                asset_repay : row.value
+              });
+            } else {
+              app.setState({
+                asset_collect : row.value
+              });
+            }
+          }
+        }
         onChange={
           () => {
-            app.setState({
-              asset_repay : row.value
-            });
+
           }
         }
         />
