@@ -1,7 +1,7 @@
 {
   "main.css": "/compound-liquidator/static/css/main.3ddb4cb2.chunk.css",
-  "main.js": "/compound-liquidator/static/js/main.53fe4765.chunk.js",
-  "main.js.map": "/compound-liquidator/static/js/main.53fe4765.chunk.js.map",
+  "main.js": "/compound-liquidator/static/js/main.5c4736b0.chunk.js",
+  "main.js.map": "/compound-liquidator/static/js/main.5c4736b0.chunk.js.map",
   "static/css/1.d1382939.chunk.css": "/compound-liquidator/static/css/1.d1382939.chunk.css",
   "static/js/1.72c3a942.chunk.js": "/compound-liquidator/static/js/1.72c3a942.chunk.js",
   "static/js/1.72c3a942.chunk.js.map": "/compound-liquidator/static/js/1.72c3a942.chunk.js.map",
@@ -26,14 +26,14 @@
   "runtime~main.js": "/compound-liquidator/static/js/runtime~main.e31b4d55.js",
   "runtime~main.js.map": "/compound-liquidator/static/js/runtime~main.e31b4d55.js.map",
   "static/css/3.d1382939.chunk.css.map": "/compound-liquidator/static/css/3.d1382939.chunk.css.map",
-  "static/css/1.d1382939.chunk.css.map": "/compound-liquidator/static/css/1.d1382939.chunk.css.map",
   "static/css/main.3ddb4cb2.chunk.css.map": "/compound-liquidator/static/css/main.3ddb4cb2.chunk.css.map",
-  "static/css/2.d1382939.chunk.css.map": "/compound-liquidator/static/css/2.d1382939.chunk.css.map",
+  "static/css/1.d1382939.chunk.css.map": "/compound-liquidator/static/css/1.d1382939.chunk.css.map",
   "static/css/4.d1382939.chunk.css.map": "/compound-liquidator/static/css/4.d1382939.chunk.css.map",
-  "static/css/5.d1382939.chunk.css.map": "/compound-liquidator/static/css/5.d1382939.chunk.css.map",
+  "static/css/2.d1382939.chunk.css.map": "/compound-liquidator/static/css/2.d1382939.chunk.css.map",
   "static/css/6.d1382939.chunk.css.map": "/compound-liquidator/static/css/6.d1382939.chunk.css.map",
   "static/css/7.df87027a.chunk.css.map": "/compound-liquidator/static/css/7.df87027a.chunk.css.map",
+  "static/css/5.d1382939.chunk.css.map": "/compound-liquidator/static/css/5.d1382939.chunk.css.map",
   "index.html": "/compound-liquidator/index.html",
-  "precache-manifest.5855ca80b0e6cf7ab88ec623cc99772f.js": "/compound-liquidator/precache-manifest.5855ca80b0e6cf7ab88ec623cc99772f.js",
+  "precache-manifest.21a628fd52f91f28f3d5a4981146fb81.js": "/compound-liquidator/precache-manifest.21a628fd52f91f28f3d5a4981146fb81.js",
   "service-worker.js": "/compound-liquidator/service-worker.js"
 }
