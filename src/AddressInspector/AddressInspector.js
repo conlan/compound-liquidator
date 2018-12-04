@@ -20,13 +20,13 @@ function AddressInspector (props) {
     }
 
     return (
-      <div>
-        <p>Choose an asset to repay:</p>
-        <BalanceTable app={app} balanceType="Borrow" stateProperty="asset_repay"/>
-
+      <div>        
         <p>Choose an asset to receive at discount:</p>
-        <BalanceTable app={app} balanceType="Collateral" stateProperty="asset_collect"/>
+        <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>
         <br/>
+
+        <p>Choose an asset to repay:</p>
+        <BalanceTable app={app} balanceType="Borrowed" stateProperty="asset_repay"/>
 
         <button className="LiquidateButton" disabled={!canLiquidate}>Liquidate</button>
       </div>

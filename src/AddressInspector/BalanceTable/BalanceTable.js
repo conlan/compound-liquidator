@@ -66,8 +66,8 @@ function BalanceTable (props) {
       )
     },
     {
-      Header: props.balance_type,
-      accessor : props.balance_type,
+      Header: balanceType,
+      accessor : balanceType,
       maxWidth: 200,
         className: "right"
     },
