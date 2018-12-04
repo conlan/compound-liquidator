@@ -39,7 +39,7 @@ function AccountsTable (props) {
 
       var ratio = +((supplyAmount / borrowAmount).toFixed(3));
 
-      var minCollateralRatio = 1.55; // 1.5
+      var minCollateralRatio = 1.5;
       var riskyCollateralRatio = 2;
 
       var state = "";
