@@ -38,7 +38,7 @@ function AccountsTable (props) {
         state = "safe";
       }
 
-      var ratioDisplay = (ratio * 100).toFixed(2) + "%";
+      var ratioDisplay = (ratio * 100).toFixed(6) + "%";
 
       var accountObj = {
         address : account.address,
