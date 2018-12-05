@@ -42,6 +42,8 @@ class App extends Component {
       accounts: [],
 
       inspected_address: "",
+      inspected_address_state : "",
+      
       borrow_balances: {},
       supply_balances: {},
       pending_balances: {},
@@ -50,7 +52,9 @@ class App extends Component {
       asset_collect: "",
 
       repaySubmittedTxHash : "",
-      liquidationDiscount : -1
+      liquidationDiscount : -1,
+
+      liquidateBlocked : true
     };
   }
 

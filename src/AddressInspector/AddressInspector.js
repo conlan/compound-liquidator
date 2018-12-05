@@ -27,7 +27,9 @@ function GoBackFromAddressInspector() {
     asset_repay: "",
     asset_collect: "",
 
-    repaySubmittedTxHash : ""
+    repaySubmittedTxHash : "",
+
+    liquidateBlocked : true
   });
 }
 
@@ -84,9 +86,13 @@ function AddressInspector (props) {
         var compoundContract = new web3.web3js.eth.Contract(compoundABI, compoundAddress);
 
         compoundContract.methods.getAccountLiquidity(app.state.inspected_address).call(function(error, result) {
-            accountLiquidity = (result / 1e18).toFixed(5) + " ETH";
+            accountLiquidity = (result / 1e18).toFixed(5);
 
-            app.setState({});
+            var liquidateBlocked = (accountLiquidity >= 0);
+
+            app.setState({
+              liquidateBlocked : liquidateBlocked
+            });
         });
       }
 
@@ -112,7 +118,7 @@ function AddressInspector (props) {
     if ((app.state.asset_repay.length > 0) && (app.state.asset_collect.length > 0)) {
       canLiquidate = true;
       
-      liquidationText = "You will repay (" + accountLiquidity + ") worth of " + app.state.asset_repay + " to receive discounted " +
+      liquidationText = "You will repay (" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
          app.state.asset_collect + ". (Note: You need a sufficient balance to close the entire position. Repaying specific amounts coming soon.)";
     }
 
@@ -128,11 +134,21 @@ function AddressInspector (props) {
       liquidationDiscountDisplay = (app.state.liquidationDiscount * 100);
     }
 
+    var accountLiquidityDisplay = "";
+    if (accountLiquidity.length > 0) {
+      accountLiquidityDisplay = accountLiquidity + " ETH";
+    }
+
+    var stateColor = (app.state.inspected_address_state === 'risky') ? '#ffbf00' : 
+      (app.state.inspected_address_state === 'safe') ? '#57d500' : '#ff2e00';
+
+    var stateText = app.state.inspected_address_state;
+
     return (
       <div className="AddressInspector">       
         <p><b>Address:</b> <i>{app.state.inspected_address}</i></p>
-        <p><b>Account Liquidity:</b> {accountLiquidity}</p>
-        <p><b>State:</b> Unsafe</p>
+        <p><b>Account Liquidity:</b> {accountLiquidityDisplay}</p>
+        <span><p><b>State: </b><span style={{color:stateColor}}>&#x25cf;</span> {stateText}</p></span>
         
         <p>Choose an asset to receive at {liquidationDiscountDisplay}% discount:</p> 
         <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>        

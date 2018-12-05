@@ -135,8 +135,9 @@ function BalanceTable(props) {
           className="LiquidateRadioInput"
           checked={app.state[stateProperty] === row.value}
           disabled={
-            ('Supplied' in row.original && row.original.Supplied == 0) ||
-            ('Borrowed' in row.original && row.original.Borrowed == 0)
+            (('Supplied' in row.original && row.original.Supplied == 0) ||
+            ('Borrowed' in row.original && row.original.Borrowed == 0)) ||
+            app.state.liquidateBlocked
           }
           onClick={() => {
             if (stateProperty === "asset_repay") {

@@ -8,30 +8,16 @@ import './AccountsTable.css';
 
 let app;
 
-function InitiateLiquidation(targetAccount_) {
-  // const myAccount = web3.address; // account of liquidator
-  // const targetAccount = targetAccount_; // account in default
-  // const assetBorrow = '...'; // asset target borrowed (in default)
-  // const assetCollateral = '...'; // asset target supplied as collateral
-  // const requestAmountClose = -1;
-
-
+function InspectAddress(address, state) {  
   app.setState({
-    inspected_address : targetAccount_
+    inspected_address : address,
+    inspected_address_state : state
   });
-  // var context = useWeb3Context();
-  // window.alert("Liquidation coming soon™");
-  // const moneyMarket = MoneyMarket.at('');
-  // moneyMarket.methods.liquidiate(targetAccount, assetBorrow, assetCollateral, requestAmountClose).send({ from: myAccount }).on('transactionHash', (trxHash) => {
-  //   console.log(`View your liquidation trx at: https://etherscan.io/tx/${trxHash}`);
-  // });
 }
 
 function AccountsTable (props) { 
   app = props.app;
-    // const web3 = useWeb3Context()
-    // const balance = useAccountBalance()
-    
+
     const data = [];
     props.accounts.forEach((account) => {
       var supplyAmount = (account.totalEthSupply / 1e18).toFixed(3);
@@ -120,7 +106,7 @@ function AccountsTable (props) {
         Cell: row => (
         <button className="InspectButton" 
         onClick={
-          () => InitiateLiquidation(row.row.address)
+          () => InspectAddress(row.row.address, row.original.state)
         }>Inspect</button>
         )
       }
