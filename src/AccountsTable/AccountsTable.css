@@ -1,7 +1,6 @@
 .AccountsTable {
-  margin-left:20px;
-  
-  width: calc(100% - 40px); /* Set the width of the sidebar */  	
+  margin-left:20px; 
+  width: calc(100% - 40px);
 }
 
 .right {
@@ -23,5 +22,5 @@ div.rt-tr {
 }
 
 .ReactTable {
-  height:50%;
+  
 }

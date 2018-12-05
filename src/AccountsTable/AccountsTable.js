@@ -127,7 +127,7 @@ function AccountsTable (props) {
       ];
 
       var showPageSizeOptions = false;
-      var defaultPageSize = 20;
+      var defaultPageSize = 15;
 
       var minRows = defaultPageSize;
 

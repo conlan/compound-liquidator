@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 
 import "./BalanceTable.css";
 
-import Tokens from "./StagingTokens.js";
+import Tokens from "../CompoundStaging.js";
 
 import { useWeb3Context /*, useAccountBalance */ } from "web3-react/hooks";
 
@@ -21,10 +21,8 @@ function BalanceTable(props) {
   var compoundABI = Tokens.moneyMarketABI;
 
   var web3 = useWeb3Context();
-  var compoundContract = new web3.web3js.eth.Contract(
-    compoundABI,
-    compoundAddress
-  );
+
+  var compoundContract = new web3.web3js.eth.Contract(compoundABI, compoundAddress);
 
   Tokens.tokens.forEach(tokenData => {
     var rowData = {
