@@ -1,7 +1,12 @@
-.ButtonDiv {
+.AddressInspector {
 	width:calc(100% - 40px);
-
 	margin-left: 20px;
+}
+
+.ButtonDiv {
+	width:100%;
+
+	/*margin-left: 20px;*/
 
 	display: inline-block;
 }

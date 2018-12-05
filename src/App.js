@@ -58,10 +58,7 @@ class App extends Component {
   render() {
     if (this.state.inspected_address.length > 0) {
       return (
-        <div className="AddressInspector">
-                    
-          <AddressInspector app={this} />
-        </div>
+        <AddressInspector app={this} />
       );
     } else {
       if (this.state.accounts.length == 0) {
@@ -72,10 +69,7 @@ class App extends Component {
         );
       } else {
         return (
-          <div className="AccountsTable">
-            <b>Compound Accounts</b>
-            <AccountsTable accounts={this.state.accounts} app={this} />
-          </div>
+          <AccountsTable accounts={this.state.accounts} app={this} />          
         );
       }
     }

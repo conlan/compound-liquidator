@@ -165,7 +165,7 @@ function BalanceTable(props) {
       columns={columns}
       showPagination={false}
       sortable={false}
-      className="AddressInspectorTable"
+      className="AddressInspectorTable -striped"
       defaultPageSize={data.length}
     />
   );

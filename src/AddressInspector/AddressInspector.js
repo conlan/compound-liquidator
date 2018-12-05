@@ -32,7 +32,7 @@ function AddressInspector (props) {
     }
 
     return (
-      <div>        
+      <div className="AddressInspector">       
         <p><b>Account: {app.state.inspected_address}</b></p>
         
         <p>Choose an asset to receive at discount:</p>

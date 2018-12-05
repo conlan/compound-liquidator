@@ -132,14 +132,18 @@ function AccountsTable (props) {
       var minRows = defaultPageSize;
 
       return (
+
+        <div className="AccountsTable">
+            <p><b>Accounts</b></p>
+          
       <ReactTable 
       data={data}
       columns={columns}
       defaultPageSize={defaultPageSize}
       showPageSizeOptions={showPageSizeOptions}
-      className="-striped"           
+      className="-striped"
       />
-      
+      </div>
       )
     }
 
