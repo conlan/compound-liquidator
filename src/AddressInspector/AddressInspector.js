@@ -3,9 +3,23 @@ import React from 'react';
 import ReactTable from "react-table";
 import BalanceTable from "../BalanceTable/BalanceTable.js"
 
-import 'react-table/react-table.css'
+import "./AddressInspector.css"
 
 let app;
+
+function GoBackFromAddressInspector() {
+  app.setState({
+    inspected_address: "",
+
+    borrow_balances: {},
+    supply_balances: {},
+
+    pending_balances: {}, // what we're currently fetching
+
+    asset_repay: "",
+    asset_collect: ""
+  });
+}
 
 function AddressInspector (props) { 
     app = props.app;
@@ -19,6 +33,8 @@ function AddressInspector (props) {
 
     return (
       <div>        
+        <p><b>Account: {app.state.inspected_address}</b></p>
+        
         <p>Choose an asset to receive at discount:</p>
         <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>        
 
@@ -26,7 +42,11 @@ function AddressInspector (props) {
         <BalanceTable app={app} balanceType="Borrowed" stateProperty="asset_repay"/>
         <br/>
 
-        <button className="LiquidateButton" disabled={!canLiquidate}>Liquidate</button>
+        <div className="ButtonDiv">
+          <button className="BackButton" onClick={() => GoBackFromAddressInspector()}>Back</button>
+        
+          <button className="LiquidateButton" disabled={!canLiquidate}>Liquidate</button>
+        </div>
       </div>
 
     )

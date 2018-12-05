@@ -11,20 +11,6 @@ import "./App.css";
 
 import sampleJson from "./samplejson.json";
 
-function GoBackFromAddressInspector(app) {
-  app.setState({
-    inspected_address: "",
-
-    borrow_balances: {},
-    supply_balances: {},
-
-    pending_balances: {}, // what we're currently fetching
-
-    asset_repay: "",
-    asset_collect: ""
-  });
-}
-
 function ParseAccountDataResponse(json, app) {
   var newAccounts = [];
 
@@ -73,8 +59,7 @@ class App extends Component {
     if (this.state.inspected_address.length > 0) {
       return (
         <div className="AddressInspector">
-          <button onClick={() => GoBackFromAddressInspector(this)}>Back</button>
-          <b>Account: {this.state.inspected_address}</b>
+                    
           <AddressInspector app={this} />
         </div>
       );

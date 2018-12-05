@@ -29,5 +29,6 @@ th, td {
 
 table {
 	border-collapse: collapse;
+  
 	width:calc(100% - 20px);	
 }
