@@ -5,7 +5,9 @@ import AddressInspector from "./AddressInspector/AddressInspector.js";
 
 import axios from "axios";
 
-// import { useWeb3Context, useAccountBalance } from 'web3-react/hooks'
+import { useWeb3Context } from 'web3-react/hooks'
+
+import Tokens from "./CompoundStaging.js";
 
 import "./App.css";
 
@@ -45,7 +47,10 @@ class App extends Component {
       pending_balances: {},
 
       asset_repay: "",
-      asset_collect: ""
+      asset_collect: "",
+
+      repaySubmittedTxHash : "",
+      liquidationDiscount : -1
     };
   }
 
@@ -55,7 +60,7 @@ class App extends Component {
     }
   }
 
-  render() {
+  render() {    
     if (this.state.inspected_address.length > 0) {
       return (
         <AddressInspector app={this} />

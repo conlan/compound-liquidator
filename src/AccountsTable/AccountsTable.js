@@ -143,7 +143,7 @@ function AccountsTable (props) {
       showPageSizeOptions={showPageSizeOptions}
       className="-striped"
       />
-      <p><a href="https://github.com/conlan/compound-liquidator" target="_blank">Github</a> | <a href="https://compound.finance" target="_blank">Compound</a> | <a href="https://compound.finance/developers#liquidate" target="_blank">Documentation</a></p>
+      <p><a href="https://github.com/conlan/compound-liquidator" target="_blank">Github</a> | <a href="https://compound.finance" target="_blank">Compound</a> | <a href="https://compound.finance/developers#liquidate" target="_blank">Documentation</a> | Use at your own <b><font color="red">risk!</font></b></p>
       </div>
       )
     }

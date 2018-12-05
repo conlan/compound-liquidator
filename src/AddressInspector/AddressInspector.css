@@ -26,3 +26,11 @@
     
   	font-size: 16px;
 }
+
+.LiquidationDetails {
+	text-align: right;
+}
+
+.TransactionSubmissionDetails {
+	text-align: right;	
+}
