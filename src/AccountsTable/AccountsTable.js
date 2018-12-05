@@ -1,9 +1,9 @@
 import React from 'react';
 
-// import { useWeb3Context, useAccountBalance } from 'web3-react/hooks'
-
 import ReactTable from "react-table";
+
 import 'react-table/react-table.css'
+
 import './AccountsTable.css';
 
 let app;
@@ -20,10 +20,10 @@ function AccountsTable (props) {
 
     const data = [];
     props.accounts.forEach((account) => {
-      var supplyAmount = (account.totalEthSupply / 1e18).toFixed(3);
-      var borrowAmount = (account.totalEthBorrow / 1e18).toFixed(3);
+      var supplyAmount = (account.totalEthSupply / 1e18).toFixed(6);
+      var borrowAmount = (account.totalEthBorrow / 1e18).toFixed(6);
 
-      var ratio = +((supplyAmount / borrowAmount).toFixed(3));
+      var ratio = +((supplyAmount / borrowAmount).toFixed(6));
 
       var minCollateralRatio = 1.5;
       var riskyCollateralRatio = 2;
@@ -38,9 +38,7 @@ function AccountsTable (props) {
         state = "safe";
       }
 
-      var ratioDisplay = (ratio * 100).toFixed(1) + "%";
-
-      // var liquidateStatus = (ratio >= minCollateralRatio) ? '0' : '1';
+      var ratioDisplay = (ratio * 100).toFixed(2) + "%";
 
       var accountObj = {
         address : account.address,

@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { useWeb3Context } from 'web3-react/hooks'
 
-import Tokens from "./CompoundStaging.js";
+import Tokens from "./Compound.js";
 
 import "./App.css";
 
@@ -87,8 +87,8 @@ class App extends Component {
   refreshAccountList() {
     // ParseAccountDataResponse(sampleJson, this);
 
-    // var URL = "https://api.compound.finance/api/risk/v1/get_account_values";
-    var URL = "https://api.stage.compound.finance/api/risk/v1/get_account_values";
+    var URL = "https://api.compound.finance/api/risk/v1/get_account_values";
+    // var URL = "https://api.stage.compound.finance/api/risk/v1/get_account_values";
 
     axios({
       method: "post",

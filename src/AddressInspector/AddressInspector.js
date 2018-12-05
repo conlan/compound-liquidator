@@ -3,9 +3,9 @@ import React from 'react';
 import ReactTable from "react-table";
 import BalanceTable from "../BalanceTable/BalanceTable.js"
 
-import { useWeb3Context /*, useAccountBalance */ } from "web3-react/hooks";
+import { useWeb3Context } from "web3-react/hooks";
 
-import Tokens from "../CompoundStaging.js";
+import Tokens from "../Compound.js";
 
 import "./AddressInspector.css"
 
@@ -44,7 +44,9 @@ function InitiateLiquidate() {
   Tokens.tokens.forEach(t => {
     if (t.symbol === app.state.asset_collect) {
       assetCollateral = t.address; // the asset we're collecting is the one that the target collateralized
-    } else if (t.symbol === app.state.asset_repay) {
+    }
+
+    if (t.symbol === app.state.asset_repay) {
       assetBorrow = t.address; // the asset that the target borrowed is the one that we are repaying on behalf of them
     }
   });  
@@ -59,16 +61,12 @@ function InitiateLiquidate() {
   compoundContract.methods.liquidateBorrow(targetAccount, assetBorrow, assetCollateral, requestAmountClose).send(
     { from: myAccount }
   ).on('transactionHash', (txHash) => {
-    // var txLink = "https://rinkeby.etherscan.io/tx/" + txHash;
-
     app.setState({
       asset_repay: "",
       asset_collect: "",
 
       repaySubmittedTxHash : txHash
     });
-  
-    // console.log("View your liquidation tx at: " + txLink);
   })
 }
 
@@ -86,19 +84,25 @@ function AddressInspector (props) {
         var compoundContract = new web3.web3js.eth.Contract(compoundABI, compoundAddress);
 
         compoundContract.methods.getAccountLiquidity(app.state.inspected_address).call(function(error, result) {
-            accountLiquidity = (result / 1e18).toFixed(5);
+          if (error == null) {
+              accountLiquidity = (result / 1e18).toFixed(6);
 
-            var liquidateBlocked = (accountLiquidity >= 0);
+              var liquidateBlocked = (accountLiquidity >= 0);
 
-            app.setState({
-              liquidateBlocked : liquidateBlocked
-            });
+              app.setState({
+                liquidateBlocked : liquidateBlocked
+              });
+            } else {
+              console.log(error);
+            }
         });
       }
 
       if (app.state.liquidationDiscount < 0) {
         compoundContract.methods.liquidationDiscount().call(function(error, result) {
           if (error == null) {
+            result = result / 1e18;
+            
             app.setState({
               liquidationDiscount : result
             });
@@ -118,13 +122,13 @@ function AddressInspector (props) {
     if ((app.state.asset_repay.length > 0) && (app.state.asset_collect.length > 0)) {
       canLiquidate = true;
       
-      liquidationText = "You will repay (" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
+      liquidationText = "You will repay (~" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
          app.state.asset_collect + ". (Note: You need a sufficient balance to close the entire position. Repaying specific amounts coming soon.)";
     }
 
     if (app.state.repaySubmittedTxHash.length > 0) {
       transactionSubmittedText = "Repay submitted! View your tx: "
-      transationSubmittedLink = "https://rinkeby.etherscan.io/tx/" + app.state.repaySubmittedTxHash;      
+      transationSubmittedLink = "https://etherscan.io/tx/" + app.state.repaySubmittedTxHash;      
     }
 
     var liquidationDiscountDisplay = "";

@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 
 import "./BalanceTable.css";
 
-import Tokens from "../CompoundStaging.js";
+import Tokens from "../Compound.js";
 
 import { useWeb3Context /*, useAccountBalance */ } from "web3-react/hooks";
 
@@ -36,7 +36,7 @@ function BalanceTable(props) {
 
     var tokenDecimals = Math.pow(10, tokenData.decimals);
 
-    rowData[balanceType] = "loading balance...";    
+    rowData[balanceType] = "";
 
     if (balanceType === "Borrowed" && asset in app.state.borrow_balances) {
       rowData["Borrowed"] = app.state.borrow_balances[asset];
