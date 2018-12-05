@@ -122,7 +122,7 @@ function AddressInspector (props) {
     if ((app.state.asset_repay.length > 0) && (app.state.asset_collect.length > 0)) {
       canLiquidate = true;
       
-      liquidationText = "You will repay (~" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
+      liquidationText = "You will repay up to (~" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
          app.state.asset_collect + ". (Note: You need a sufficient balance to close the entire position. Repaying specific amounts coming soon.)";
     }
 
