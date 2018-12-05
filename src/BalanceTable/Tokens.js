@@ -26,6 +26,7 @@ export default {
       		"decimals" : 18   
       	}
   ],
+  moneyMarketAddress : "0x61bbd7bd5ee2a202d7e62519750170a52a8dfd45",
   moneyMarketABI : [
 	{
 		"constant": true,

@@ -1,9 +1,7 @@
 import React from 'react';
 
-// import { useWeb3Context, useAccountBalance } from 'web3-react/hooks'
-
 import ReactTable from "react-table";
-import BalanceTable from "./BalanceTable/BalanceTable.js"
+import BalanceTable from "../BalanceTable/BalanceTable.js"
 
 import 'react-table/react-table.css'
 
