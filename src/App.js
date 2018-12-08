@@ -71,7 +71,9 @@ class App extends Component {
       liquidationDiscount : -1,
 
       // whether the user can choose assets on the address inspect. Blocked by default unless that account has a negative account liquidity
-      liquidateBlocked : true
+      liquidateBlocked : true,
+
+      currentBlock : ""
     };
   }
 
@@ -99,7 +101,7 @@ class App extends Component {
       } else {
       	// show the accounts list
         return (
-          <AccountsTable accounts={this.state.accounts} app={this} />          
+          <AccountsTable accounts={this.state.accounts} app={this} currentBlock={this.state.currentBlock}/>
         );
       }
     }

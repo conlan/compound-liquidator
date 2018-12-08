@@ -1,5 +1,14 @@
+.AccountsLabel {
+	display: inline;
+}
+
+.CurrentBlock {	
+	float: right;
+}
+
 .AccountsTable {
-  margin-left:20px; 
+	margin-top:20px;
+	  margin-left:20px; 
   width: calc(100% - 40px);
 }
 
