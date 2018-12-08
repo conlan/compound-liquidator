@@ -6,7 +6,7 @@ import "./BalanceTable.css";
 
 import Tokens from "../Compound.js";
 
-import { useWeb3Context /*, useAccountBalance */ } from "web3-react/hooks";
+import { useWeb3Context} from "web3-react/hooks";
 
 function BalanceTable(props) {
   let app = props.app;
@@ -28,7 +28,8 @@ function BalanceTable(props) {
     var rowData = {
       symbol: tokenData.symbol,
       address: tokenData.address,
-      liquidateAsset: tokenData.symbol
+      liquidateAsset: tokenData.symbol,
+      inputType : ""
     };
 
     var asset = tokenData.address;
@@ -100,6 +101,14 @@ function BalanceTable(props) {
       }
     }
 
+    if (('Supplied' in rowData && rowData.Supplied == 0) ||
+        ('Borrowed' in rowData && rowData.Borrowed == 0) ||
+        app.state.liquidateBlocked) {
+      rowData.inputType = "hidden";
+    } else {
+      rowData.inputType = "radio";
+    }
+
     data.push(rowData);
   });
 
@@ -131,14 +140,9 @@ function BalanceTable(props) {
       maxWidth: 100,
       Cell: row => (
         <input
-          type="radio"
+          type={row.original.inputType}
           className="LiquidateRadioInput"
-          checked={app.state[stateProperty] === row.value}
-          disabled={
-            (('Supplied' in row.original && row.original.Supplied == 0) ||
-            ('Borrowed' in row.original && row.original.Borrowed == 0)) ||
-            app.state.liquidateBlocked
-          }
+          checked={app.state[stateProperty] === row.value}          
           onClick={() => {
             if (stateProperty === "asset_repay") {
               app.setState({
