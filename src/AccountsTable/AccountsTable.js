@@ -62,6 +62,15 @@ function AccountsTable (props) {
 
       },
       {
+        Header: "Last Updated",
+        accessor : 'block',
+        maxWidth: 200,
+        className: "right",
+      	Cell: row => (
+        	<a href={'https://etherscan.io/block/' + row.value} target='_blank'>{row.value}</a>            
+        )
+      },
+      {
         Header: "Supply",
         accessor : 'supply',
         maxWidth: 200,
