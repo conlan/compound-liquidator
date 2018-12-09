@@ -6,7 +6,7 @@ import "./BalanceTable.css";
 
 import Tokens from "../Compound.js";
 
-import { useWeb3Context} from "web3-react/hooks";
+import { useWeb3Context } from "web3-react/hooks";
 
 function BalanceTable(props) {
   let app = props.app;
@@ -22,14 +22,18 @@ function BalanceTable(props) {
 
   var web3 = useWeb3Context();
 
-  var compoundContract = new web3.web3js.eth.Contract(compoundABI, compoundAddress);
+  var compoundContract = new web3.web3js.eth.Contract(
+    compoundABI,
+    compoundAddress
+  );
 
   Tokens.tokens.forEach(tokenData => {
     var rowData = {
       symbol: tokenData.symbol,
       address: tokenData.address,
       liquidateAsset: tokenData.symbol,
-      inputType : ""
+      clickable : false,
+      disabled : true
     };
 
     var asset = tokenData.address;
@@ -42,15 +46,14 @@ function BalanceTable(props) {
     if (balanceType === "Borrowed" && asset in app.state.borrow_balances) {
       rowData["Borrowed"] = app.state.borrow_balances[asset];
     } else if (
-      balanceType === "Supplied" && asset in app.state.supply_balances
+      balanceType === "Supplied" &&
+      asset in app.state.supply_balances
     ) {
       rowData["Supplied"] = app.state.supply_balances[asset];
     } else if (Object.keys(app.state.pending_balances).length > 0) {
       // don't re-fetch an asset if we're already fetching one
     } else {
       app.state.pending_balances[assetFetchKey] = 0;
-
-      // console.log(Object.keys(app.state.pending_balances).length + " <");
 
       if (balanceType === "Borrowed") {
         compoundContract.methods
@@ -71,7 +74,7 @@ function BalanceTable(props) {
               app.setState({
                 borrow_balances: newBalances
               });
-            } else {
+            } else {            
               app.setState({});
             }
           });
@@ -94,23 +97,26 @@ function BalanceTable(props) {
               app.setState({
                 supply_balances: newBalances
               });
-            } else {
+            } else {              
               app.setState({});
             }
           });
       }
     }
 
-    if (('Supplied' in rowData && rowData.Supplied == 0) ||
-        ('Borrowed' in rowData && rowData.Borrowed == 0) ||
-        app.state.liquidateBlocked) {
-      rowData.inputType = "hidden";
+    if (("Supplied" in rowData && rowData.Supplied == 0) ||
+      ("Borrowed" in rowData && rowData.Borrowed == 0) ) {      
+      rowData.clickable = false;
     } else {
-      rowData.inputType = "radio";
+      rowData.clickable = true;
     }
+    
+    rowData.disabled = app.state.liquidateBlocked;
 
     data.push(rowData);
   });
+
+  console.log(data);
 
   var columns = [
     {
@@ -131,34 +137,40 @@ function BalanceTable(props) {
       Header: balanceType,
       accessor: balanceType,
       maxWidth: 200,
-      className: "right",
-      
+      className: "right"
     },
     {
       Header: "",
       accessor: "liquidateAsset",
       maxWidth: 100,
-      Cell: row => (
-        <input
-          type={row.original.inputType}
-          className="LiquidateRadioInput"
-          checked={app.state[stateProperty] === row.value}          
-          onClick={() => {
-            if (stateProperty === "asset_repay") {
-              app.setState({
-                asset_repay: row.value
-              });
-            } else {
-              app.setState({
-                asset_collect: row.value
-              });
-            }
-          }}
-          onChange={() => {
-            console.log(row.original.Supplied == 0);
-          }}
-        />
-      )
+      Cell: row => {
+        if (row.original.clickable) {
+          return (          
+            <input
+              type="radio"
+              className="LiquidateRadioInput"
+              checked={app.state[stateProperty] === row.value}
+              disabled={row.original.disabled}
+              onClick={() => {
+                if (stateProperty === "asset_repay") {
+                  app.setState({
+                    asset_repay: row.value
+                  });
+                } else {
+                  app.setState({
+                    asset_collect: row.value
+                  });
+                }
+              }}
+              onChange={() => {
+                console.log(row.original.Supplied == 0);
+              }}
+            />          
+          )
+        } else {
+          return <span/>
+        }
+      }
     }
   ];
 
@@ -166,6 +178,7 @@ function BalanceTable(props) {
     <ReactTable
       data={data}
       columns={columns}
+      resizable={false}
       showPagination={false}
       sortable={false}
       className="AddressInspectorTable -striped"

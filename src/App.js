@@ -37,8 +37,20 @@ function ParseAccountDataResponse(json, app) {
     newAccounts.push(account);
   });
 
+  var inspectedAddressParam = "";
+  // check for URL Search Params support
+  if ("URLSearchParams" in window) {
+    // extract factory token from URL if found
+    var urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.has("address")) {
+      inspectedAddressParam = urlParams.get("address");
+    }
+  }
+
   app.setState({
-    accounts: newAccounts
+    accounts: newAccounts,
+    inspected_address : inspectedAddressParam
   });
 }
 
