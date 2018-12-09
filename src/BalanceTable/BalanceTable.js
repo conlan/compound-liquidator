@@ -33,7 +33,8 @@ function BalanceTable(props) {
       address: tokenData.address,
       liquidateAsset: tokenData.symbol,
       clickable : false,
-      disabled : true
+      disabled : true,
+      fetching : false
     };
 
     var asset = tokenData.address;
@@ -54,6 +55,8 @@ function BalanceTable(props) {
       // don't re-fetch an asset if we're already fetching one
     } else {
       app.state.pending_balances[assetFetchKey] = 0;
+
+      rowData.fetching = true;
 
       if (balanceType === "Borrowed") {
         compoundContract.methods
@@ -167,8 +170,10 @@ function BalanceTable(props) {
               }}
             />          
           )
+        } else if (row.original.fetching) {
+          return <div className="BalanceLoading"><img src="./small-loading.gif"/></div>
         } else {
-          return <span/>
+          return <div/>
         }
       }
     }

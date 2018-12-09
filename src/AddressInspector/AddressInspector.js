@@ -129,7 +129,16 @@ function AddressInspector (props) {
       }
     }
 
+    // refresh not disabled by default
     var refreshDisabled = false;
+
+    // but check that we have all the borrow balances fetched
+    if ((Object.keys(app.state.borrow_balances).length) < Object.keys(Tokens.tokens).length) {
+      refreshDisabled = true;
+    } else if ((Object.keys(app.state.supply_balances).length) < Object.keys(Tokens.tokens).length) {
+      // and all the supply balances fetched. If either of these aren't fully fetched then disable refresh
+      refreshDisabled = true;
+    }
 
     var canLiquidate = false;
     
@@ -162,6 +171,7 @@ function AddressInspector (props) {
     if (accountLiquidity.length > 0) {
       accountLiquidityDisplay = accountLiquidity + " ETH";
     } else {
+      // if account liquidity not set then disable refresh
       refreshDisabled = true;
     }
 
