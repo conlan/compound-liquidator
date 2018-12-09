@@ -17,6 +17,16 @@
   	font-size: 16px;
 }
 
+.RefreshButton {
+	width:100px;	
+
+	padding: 5px;
+
+	float:right;
+    
+  	font-size: 14px;
+}
+
 .LiquidateButton {
 	width:200px; 
 

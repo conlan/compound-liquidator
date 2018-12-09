@@ -13,7 +13,25 @@ var app;
 var accountLiquidity = "";
 var web3;
 
-function GoBackFromAddressInspector() {
+function OnRefreshClicked() {
+  accountLiquidity = "";
+
+  app.setState({
+    borrow_balances : {},
+    supply_balances : {},
+
+    pending_balances: {}, // what we're currently fetching
+
+    asset_repay: "",
+    asset_collect: "",
+
+    repaySubmittedTxHash : "",
+
+    liquidateBlocked : true
+  });
+}
+
+function OnBackClicked() {
   accountLiquidity = "";
   
   app.setState({
@@ -111,6 +129,8 @@ function AddressInspector (props) {
       }
     }
 
+    var refreshDisabled = false;
+
     var canLiquidate = false;
     
     var liquidationText = "";
@@ -141,6 +161,8 @@ function AddressInspector (props) {
     var accountLiquidityDisplay = "";
     if (accountLiquidity.length > 0) {
       accountLiquidityDisplay = accountLiquidity + " ETH";
+    } else {
+      refreshDisabled = true;
     }
 
     var stateColor = (app.state.inspected_address_state === 'risky') ? '#ffbf00' : 
@@ -148,9 +170,14 @@ function AddressInspector (props) {
 
     var stateText = app.state.inspected_address_state;
 
+
     return (
-      <div className="AddressInspector">       
-        <p><b>Address:</b> <i>{app.state.inspected_address}</i></p>
+      <div className="AddressInspector">
+        <div>
+          <p className="SameLine"><b>Address:</b> <i>{app.state.inspected_address}</i></p>
+
+          <button className="RefreshButton" onClick={() => OnRefreshClicked()} disabled={refreshDisabled}>Refresh</button>
+        </div>
         <p><b>Account Liquidity:</b> {accountLiquidityDisplay}</p>
         <span><p><b>State: </b><span style={{color:stateColor}}>&#x25cf;</span> {stateText}</p></span>
         
@@ -165,7 +192,7 @@ function AddressInspector (props) {
         <p className="TransactionSubmissionDetails">{transactionSubmittedText}<a href={transationSubmittedLink} target="_blank">{transationSubmittedLink}</a></p>
 
         <div className="ButtonDiv">
-          <button className="BackButton" onClick={() => GoBackFromAddressInspector()}>Back</button>      
+          <button className="BackButton" onClick={() => OnBackClicked()}>Back</button>
           <button className="LiquidateButton" disabled={!canLiquidate}
             onClick={() => InitiateLiquidate()}
           >Repay</button>
