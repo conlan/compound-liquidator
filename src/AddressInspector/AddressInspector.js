@@ -6,7 +6,7 @@ import { BigNumber } from "bignumber.js";
 
 import { useWeb3Context } from "web3-react/hooks";
 
-import Tokens from "../constants/CompoundStaging.js";
+import Tokens from "../constants/Compound.js";
 
 import "./AddressInspector.css"
 
