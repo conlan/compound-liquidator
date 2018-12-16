@@ -12,6 +12,10 @@
   width: calc(100% - 40px);
 }
 
+.center {
+  text-align: center;
+}
+
 .right {
   text-align: right;
 }
@@ -23,7 +27,7 @@
     text-align: center;
     
     display: inline-block;
-  	font-size: 16px;
+  	font-size: 12px;
 }
 
 div.rt-tr {

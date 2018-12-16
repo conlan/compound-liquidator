@@ -5,6 +5,7 @@
   "homepage": "https://conlan.github.io/compound-liquidator",
   "dependencies": {
     "axios": "^0.18.0",
+    "bignumber.js": "^8.0.1",
     "react": "^16.7.0-alpha.0",
     "react-dom": "^16.7.0-alpha.0",
     "react-scripts": "2.1.1",

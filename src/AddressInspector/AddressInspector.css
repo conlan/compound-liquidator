@@ -17,6 +17,9 @@
   	font-size: 16px;
 }
 
+.EnableButton {	
+}
+
 .RefreshButton {
 	width:100px;	
 
@@ -34,7 +37,7 @@
 
     padding: 10px;
     
-  	font-size: 16px;
+  	font-size: 14px;
 }
 
 .LiquidationDetails {

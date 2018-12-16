@@ -5,7 +5,7 @@ import BalanceTable from "../BalanceTable/BalanceTable.js"
 
 import { useWeb3Context } from "web3-react/hooks";
 
-import Tokens from "../Compound.js";
+import Tokens from "../constants/Compound.js";
 
 import "./AddressInspector.css"
 
@@ -71,10 +71,10 @@ function InitiateLiquidate() {
 
   var requestAmountClose = -1; // TODO this should be an input field or slider 
 
-  var compoundAddress = Tokens.moneyMarketAddress;
+  var liquidationAddress = Tokens.liquidationAddress;
   var compoundABI = Tokens.moneyMarketABI;
 
-  var compoundContract = new web3.web3js.eth.Contract(compoundABI, compoundAddress);
+  var compoundContract = new web3.web3js.eth.Contract(compoundABI, liquidationAddress);
 
   compoundContract.methods.liquidateBorrow(targetAccount, assetBorrow, assetCollateral, requestAmountClose).send(
     { from: myAccount }

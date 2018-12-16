@@ -1,15 +1,41 @@
 import React from "react";
-
 import ReactTable from "react-table";
 
+import { BigNumber } from "bignumber.js";
 import "./BalanceTable.css";
 
-import Tokens from "../Compound.js";
+import Tokens from "../constants/Compound.js";
 
 import { useWeb3Context } from "web3-react/hooks";
 
+let app;
+let web3;
+
+function OnEnableTokenClicked (row) {
+  var liquidationAddress = Tokens.liquidationAddress;
+
+  var tokenAddress = row.original.address;
+  var ERC20_ABI = Tokens.erc20ABI;
+
+  var tokenContract = new web3.web3js.eth.Contract(ERC20_ABI, tokenAddress);
+
+
+  // approve maximum amount of tokens
+  tokenContract.methods.approve(liquidationAddress, new BigNumber(2**(256) - 1).toFixed() ).send(
+    { from: web3.account }
+  ).on('transactionHash', (txHash) => {
+    console.log(txHash);
+  }).on("confirmation", (err, receipt) => {
+    console.log(receipt);
+
+    app.state.allowance_states[tokenAddress] = true;
+
+    app.setState({});
+  });
+}
+
 function BalanceTable(props) {
-  let app = props.app;
+  app = props.app;
 
   var balanceType = props.balanceType;
   var stateProperty = props.stateProperty;
@@ -20,7 +46,7 @@ function BalanceTable(props) {
   var compoundAddress = Tokens.moneyMarketAddress;
   var compoundABI = Tokens.moneyMarketABI;
 
-  var web3 = useWeb3Context();
+  web3 = useWeb3Context();
 
   var compoundContract = new web3.web3js.eth.Contract(
     compoundABI,
@@ -28,13 +54,20 @@ function BalanceTable(props) {
   );
 
   Tokens.tokens.forEach(tokenData => {
+    var isEnabled = false;
+
+    if (tokenData.address in app.state.allowance_states) {
+      isEnabled = app.state.allowance_states[tokenData.address];
+    }
+
     var rowData = {
       symbol: tokenData.symbol,
       address: tokenData.address,
       liquidateAsset: tokenData.symbol,
       clickable : false,
       disabled : true,
-      fetching : false
+      fetching : false,
+      enabled : isEnabled
     };
 
     var asset = tokenData.address;
@@ -119,7 +152,7 @@ function BalanceTable(props) {
     data.push(rowData);
   });
 
-  console.log(data);
+  // console.log(data);
 
   var columns = [
     {
@@ -145,9 +178,12 @@ function BalanceTable(props) {
     {
       Header: "",
       accessor: "liquidateAsset",
-      maxWidth: 100,
+      maxWidth: 75,
+      className: "center",
       Cell: row => {
-        if (row.original.clickable) {
+        if (row.original.enabled === false) {
+          return (<button onClick={() => OnEnableTokenClicked(row)} className="EnableButton">✅</button>)
+        } else if (row.original.clickable) {
           return (          
             <input
               type="radio"
@@ -178,7 +214,7 @@ function BalanceTable(props) {
       }
     }
   ];
-
+  
   return (
     <ReactTable
       data={data}

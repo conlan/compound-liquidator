@@ -3,15 +3,23 @@ import React, { Component } from "react";
 import AccountsTable from "./AccountsTable/AccountsTable.js";
 import AddressInspector from "./AddressInspector/AddressInspector.js";
 
+import { useWeb3Context } from "web3-react/hooks";
+
+import Tokens from "./constants/Compound.js"
+
 import axios from "axios";
-
-import { useWeb3Context } from 'web3-react/hooks'
-
-import Tokens from "./Compound.js";
 
 import "./App.css";
 
 import sampleJson from "./samplejson.json";
+
+let web3;
+
+function Web3Setter(props) {
+  web3 = useWeb3Context();
+
+  return (<div/>)
+}
 
 /*
  * Parse response data from server into an array of account objects. Can point to local json or server response
@@ -72,6 +80,8 @@ class App extends Component {
       // which balances are currently being requested from server
       pending_balances: {},
 
+      allowance_states: {},
+
       // the asset that the user has toggled to repay for the borrow
       asset_repay: "",
       // the asset that the user has toggled to collect from borrower      
@@ -94,6 +104,8 @@ class App extends Component {
     if (this.state.accounts.length == 0) {
       this.refreshAccountList();
     }
+
+    this.refreshAllowanceAmounts();
   }
 
   render() {
@@ -107,6 +119,7 @@ class App extends Component {
       if (this.state.accounts.length == 0) {
         return (
           <div>
+            <Web3Setter/>
             <img src="./loading.gif" className="Loading" />
           </div>
         );
@@ -117,6 +130,31 @@ class App extends Component {
         );
       }
     }
+  }
+
+  refreshAllowanceAmounts() {
+    // find out how much the liquidation address can spend on user's behalf. If 0 then the token is not "enabled" for liquidation
+    var liquidationAddress = Tokens.liquidationAddress;
+    var ERC20_ABI = Tokens.erc20ABI;
+
+    let that = this;
+
+    Tokens.tokens.forEach((t) => {
+      if ((t.address in this.state.allowance_states) == false) {
+        
+        var tokenContract = new web3.web3js.eth.Contract(ERC20_ABI, t.address);
+
+        tokenContract.methods.allowance(web3.account, liquidationAddress).call(function(error, allowance) {
+          if (error === null) {
+            if (allowance > 0) {
+              that.state.allowance_states[t.address] = true;
+              
+              that.setState({});
+            }
+          }
+        });
+      }
+    });
   }
 
   refreshAccountList() {
