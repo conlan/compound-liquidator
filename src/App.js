@@ -83,6 +83,8 @@ class App extends Component {
       pending_allowances: {},
       allowance_states: {},
 
+      asset_prices: {},
+
       // the asset that the user has toggled to repay for the borrow
       asset_repay: "",
       // the asset that the user has toggled to collect from borrower      
@@ -141,6 +143,8 @@ class App extends Component {
 
     let that = this;
 
+    var compoundContract = new web3.web3js.eth.Contract(Tokens.moneyMarketABI, Tokens.moneyMarketAddress);
+
     Tokens.tokens.forEach((t) => {
       if ((t.address in this.state.allowance_states) == false) {
         
@@ -153,6 +157,19 @@ class App extends Component {
               
               that.setState({});
             }
+          }
+        });
+      }
+
+      if ((t.address in this.state.asset_prices) == false) {
+        var tokenDecimals = Math.pow(10, t.decimals);
+
+        compoundContract.methods.assetPrices(t.address).call(function(error, price) {
+          if (error === null) {
+            price = price / tokenDecimals;
+
+            console.log(t.symbol + " " + price);
+            that.state.asset_prices[t.address] = price;
           }
         });
       }

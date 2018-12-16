@@ -25,6 +25,7 @@ function GetIntendedRepayAmount() {
 
 function OnRepaySliderValueChange() {
   var repaySlider = document.getElementById('repaySlider');
+
   var liquidationButton = document.getElementById('LiquidateButton');
 
   var repayAmount = GetIntendedRepayAmount();
@@ -122,7 +123,11 @@ function InitiateLiquidate() {
 
         repaySubmittedTxHash : txHash
       });// TODO await confirmation
-    })
+    }).on("confirmation", (err, receipt) => {
+      if (app.state.repaySubmittedTxHash === receipt.transactionHash) {
+        OnRefreshClicked();
+      }
+  });
   }
 }
 
@@ -207,9 +212,13 @@ function AddressInspector (props) {
         // calculate the maximum amount that the user can repay
         var maxRepayAmountInEth = -accountLiquidity;
 
-        var assetRepayExchangeRate = 0.003200703333; // TODO
+        if (tokenAddressToBeRepaid in app.state.asset_prices) {
+          var assetRepayExchangeRate = app.state.asset_prices[tokenAddressToBeRepaid];
 
-        maxRepayAmount = (-accountLiquidity / assetRepayExchangeRate);
+          maxRepayAmount = (-accountLiquidity / assetRepayExchangeRate);
+        } else {
+          maxRepayAmount = 0;
+        }
       } else {
         liquidationText = "Unable to repay " + app.state.asset_repay + " for same asset " + app.state.asset_collect + ".";
       }
@@ -263,8 +272,6 @@ function AddressInspector (props) {
         <div className="ButtonDiv">
           <button className="BackButton" onClick={() => OnBackClicked()}>Back</button>
           
-          
-
           <button className="LiquidateButton" disabled={!canLiquidate} id="LiquidateButton"
             onClick={() => InitiateLiquidate()}
           >Repay</button>
