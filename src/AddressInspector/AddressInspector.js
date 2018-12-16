@@ -2,10 +2,11 @@ import React from 'react';
 
 // import ReactTable from "react-table";
 import BalanceTable from "../BalanceTable/BalanceTable.js"
+import { BigNumber } from "bignumber.js";
 
 import { useWeb3Context } from "web3-react/hooks";
 
-import Tokens from "../constants/Compound.js";
+import Tokens from "../constants/CompoundStaging.js";
 
 import "./AddressInspector.css"
 
@@ -13,8 +14,31 @@ var app;
 var accountLiquidity = "";
 var web3;
 
+var maxRepayAmount = 0;
+var tokenAddressToBeRepaid = "";
+
+function GetIntendedRepayAmount() {
+  var repaySlider = document.getElementById('repaySlider');
+
+  return new BigNumber(repaySlider.value / repaySlider.max * maxRepayAmount).toFixed(4);
+}
+
+function OnRepaySliderValueChange() {
+  var repaySlider = document.getElementById('repaySlider');
+  var liquidationButton = document.getElementById('LiquidateButton');
+
+  var repayAmount = GetIntendedRepayAmount();
+
+  liquidationButton.innerText = "Repay " + repayAmount + " " + app.state.asset_repay;
+}
+
 function OnRefreshClicked() {
   accountLiquidity = "";
+  tokenAddressToBeRepaid = "";
+
+  document.getElementById('repaySlider').value = 50;
+
+  document.getElementById('LiquidateButton').innerText = "Repay";
 
   app.setState({
     borrow_balances : {},
@@ -33,6 +57,7 @@ function OnRefreshClicked() {
 
 function OnBackClicked() {
   accountLiquidity = "";
+  tokenAddressToBeRepaid = "";
   
   app.setState({
     inspected_address: "",
@@ -52,40 +77,53 @@ function OnBackClicked() {
 }
 
 function InitiateLiquidate() {
-  var myAccount = web3.account;
-  var targetAccount = app.state.inspected_address;
+  var requestAmountClose = GetIntendedRepayAmount();
 
-  // determine the asset borrow and collateral
-  var assetBorrow = "";
-  var assetCollateral = ""; 
+  if (Number(requestAmountClose) === 0) {
+    window.alert("Please set an amount greater than 0.");
+  } else {
+    var myAccount = web3.account;
+    var targetAccount = app.state.inspected_address;
 
-  Tokens.tokens.forEach(t => {
-    if (t.symbol === app.state.asset_collect) {
-      assetCollateral = t.address; // the asset we're collecting is the one that the target collateralized
-    }
+    // determine the asset borrow and collateral
+    var assetBorrow = "";
+    var assetBorrowDecimals = 0;
 
-    if (t.symbol === app.state.asset_repay) {
-      assetBorrow = t.address; // the asset that the target borrowed is the one that we are repaying on behalf of them
-    }
-  });  
+    var assetCollateral = ""; 
 
-  var requestAmountClose = -1; // TODO this should be an input field or slider 
+    Tokens.tokens.forEach(t => {
+      if (t.symbol === app.state.asset_collect) {
+        assetCollateral = t.address; // the asset we're collecting is the one that the target collateralized
+      }
 
-  var liquidationAddress = Tokens.liquidationAddress;
-  var compoundABI = Tokens.moneyMarketABI;
+      if (t.symbol === app.state.asset_repay) {
+        assetBorrow = t.address; // the asset that the target borrowed is the one that we are repaying on behalf of them
 
-  var compoundContract = new web3.web3js.eth.Contract(compoundABI, liquidationAddress);
+        assetBorrowDecimals = Math.pow(10, t.decimals);
+      }
+    });
 
-  compoundContract.methods.liquidateBorrow(targetAccount, assetBorrow, assetCollateral, requestAmountClose).send(
-    { from: myAccount }
-  ).on('transactionHash', (txHash) => {
-    app.setState({
-      asset_repay: "",
-      asset_collect: "",
+    // TODO enforce user's balance available
+    requestAmountClose = new BigNumber(requestAmountClose * assetBorrowDecimals).toFixed();
 
-      repaySubmittedTxHash : txHash
-    });// TODO await confirmation
-  })
+    console.log(requestAmountClose);
+
+    var liquidationAddress = Tokens.liquidationAddress;
+    var liquidationABI = Tokens.liquidationABI;
+
+    var compoundContract = new web3.web3js.eth.Contract(liquidationABI, liquidationAddress);
+
+    compoundContract.methods.liquidateBorrow(targetAccount, assetBorrow, assetCollateral, requestAmountClose).send(
+      { from: myAccount }
+    ).on('transactionHash', (txHash) => {
+      app.setState({
+        asset_repay: "",
+        asset_collect: "",
+
+        repaySubmittedTxHash : txHash
+      });// TODO await confirmation
+    })
+  }
 }
 
 function AddressInspector (props) { 
@@ -147,12 +185,34 @@ function AddressInspector (props) {
     var transactionSubmittedText = "";
     var transationSubmittedLink = "";
 
+    var repaySliderDisabled = true;
+
     // only enable liquidate button if both asset to repay and collect have been set
     if ((app.state.asset_repay.length > 0) && (app.state.asset_collect.length > 0)) {
-      canLiquidate = true;
+      if (app.state.asset_repay !== app.state.asset_collect) {
+        canLiquidate = true;
       
-      liquidationText = "You must repay at least (~" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
-         app.state.asset_collect + ". (Note: Repaying specific amounts coming soon.)";
+        liquidationText = "You can repay up to (~" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
+           app.state.asset_collect + ". (Note: Repaying specific amounts coming soon.)";
+
+        repaySliderDisabled = false;
+
+        // find the address for the token that the user has selected to repay
+        Tokens.tokens.forEach(t => {
+          if (t.symbol === app.state.asset_repay) {
+            tokenAddressToBeRepaid = t.address;
+          }
+        });
+
+        // calculate the maximum amount that the user can repay
+        var maxRepayAmountInEth = -accountLiquidity;
+
+        var assetRepayExchangeRate = 0.003200703333; // TODO
+
+        maxRepayAmount = (-accountLiquidity / assetRepayExchangeRate);
+      } else {
+        liquidationText = "Unable to repay " + app.state.asset_repay + " for same asset " + app.state.asset_collect + ".";
+      }
     }
 
     if (app.state.repaySubmittedTxHash.length > 0) {
@@ -180,7 +240,6 @@ function AddressInspector (props) {
 
     var stateText = app.state.inspected_address_state;
 
-
     return (
       <div className="AddressInspector">
         <div>
@@ -194,7 +253,7 @@ function AddressInspector (props) {
         <p>Choose an asset to receive at {liquidationDiscountDisplay}% discount:</p> 
         <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>        
 
-        <p>Choose an asset to repay on behalf of borrower to return their <b>Account Liquidity</b> to 0:</p>
+        <p>Choose a different asset to repay on behalf of borrower to return their <b>Account Liquidity</b> to 0:</p>
         <BalanceTable app={app} balanceType="Borrowed" stateProperty="asset_repay"/>
 
         <p className="LiquidationDetails">{liquidationText}</p>
@@ -203,9 +262,14 @@ function AddressInspector (props) {
 
         <div className="ButtonDiv">
           <button className="BackButton" onClick={() => OnBackClicked()}>Back</button>
-          <button className="LiquidateButton" disabled={!canLiquidate}
+          
+          
+
+          <button className="LiquidateButton" disabled={!canLiquidate} id="LiquidateButton"
             onClick={() => InitiateLiquidate()}
           >Repay</button>
+          <input type="range" onInput={() => OnRepaySliderValueChange()} min="0" max="100"
+            className="slider" id="repaySlider" disabled={repaySliderDisabled}/>
         </div>
       </div>
 

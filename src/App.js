@@ -5,7 +5,7 @@ import AddressInspector from "./AddressInspector/AddressInspector.js";
 
 import { useWeb3Context } from "web3-react/hooks";
 
-import Tokens from "./constants/Compound.js"
+import Tokens from "./constants/CompoundStaging.js"
 
 import axios from "axios";
 
@@ -163,10 +163,10 @@ class App extends Component {
   	// TESTING
     // ParseAccountDataResponse(sampleJson, this);
 
-    var URL = "https://api.compound.finance/api/risk/v1/get_account_values";
+    // var URL = "https://api.compound.finance/api/risk/v1/get_account_values";
 
     // STAGING TODO detect and using appropriate server automatically
-    // var URL = "https://api.stage.compound.finance/api/risk/v1/get_account_values";
+    var URL = "https://api.stage.compound.finance/api/risk/v1/get_account_values";
 
     axios({
       method: "post",

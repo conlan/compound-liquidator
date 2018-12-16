@@ -4,7 +4,7 @@ import ReactTable from "react-table";
 import { BigNumber } from "bignumber.js";
 import "./BalanceTable.css";
 
-import Tokens from "../constants/Compound.js";
+import Tokens from "../constants/CompoundStaging.js";
 
 import { useWeb3Context } from "web3-react/hooks";
 
