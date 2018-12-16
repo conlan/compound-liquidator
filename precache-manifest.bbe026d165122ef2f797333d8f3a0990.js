@@ -4,20 +4,20 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/js/4.7a8f7d34.chunk.js"
   },
   {
-    "revision": "de0149375c25a1f1905b",
-    "url": "/compound-liquidator/static/css/main.693920b4.chunk.css"
+    "revision": "19b55f3e607262924ac6",
+    "url": "/compound-liquidator/static/css/main.170bcc85.chunk.css"
   },
   {
-    "revision": "d477dfa39c10693b3470",
-    "url": "/compound-liquidator/static/js/runtime~main.d477dfa3.js"
+    "revision": "e05ff4a9cdac561a4d4a",
+    "url": "/compound-liquidator/static/js/runtime~main.e05ff4a9.js"
   },
   {
     "revision": "ced1c7272246f8f75147",
     "url": "/compound-liquidator/static/js/1.ced1c727.chunk.js"
   },
   {
-    "revision": "1fbfbea05bf6a65435fd",
-    "url": "/compound-liquidator/static/js/7.1fbfbea0.chunk.js"
+    "revision": "13625e7644a3a224e4fd",
+    "url": "/compound-liquidator/static/js/7.13625e76.chunk.js"
   },
   {
     "revision": "95a8932b2fd164514daf",
@@ -32,23 +32,23 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/js/3.e4eb46e1.chunk.js"
   },
   {
-    "revision": "cc8473345eda9644eff3",
-    "url": "/compound-liquidator/static/js/5.cc847334.chunk.js"
+    "revision": "cf6f11b4249993d11b3d",
+    "url": "/compound-liquidator/static/js/5.cf6f11b4.chunk.js"
   },
   {
-    "revision": "de0149375c25a1f1905b",
-    "url": "/compound-liquidator/static/js/main.de014937.chunk.js"
+    "revision": "19b55f3e607262924ac6",
+    "url": "/compound-liquidator/static/js/main.19b55f3e.chunk.js"
   },
   {
-    "revision": "1fbfbea05bf6a65435fd",
-    "url": "/compound-liquidator/static/css/7.0a82d2c1.chunk.css"
+    "revision": "13625e7644a3a224e4fd",
+    "url": "/compound-liquidator/static/css/7.60d091c4.chunk.css"
   },
   {
     "revision": "de3b8d2c2404adb00ab1",
     "url": "/compound-liquidator/static/css/6.53d04195.chunk.css"
   },
   {
-    "revision": "cc8473345eda9644eff3",
+    "revision": "cf6f11b4249993d11b3d",
     "url": "/compound-liquidator/static/css/5.53d04195.chunk.css"
   },
   {
@@ -68,7 +68,7 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/css/1.53d04195.chunk.css"
   },
   {
-    "revision": "d89242d137b9e655063f502b77101c80",
+    "revision": "33cb76cf78593a8d56fcda1790b892f8",
     "url": "/compound-liquidator/index.html"
   }
 ];
