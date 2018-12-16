@@ -84,7 +84,7 @@ function InitiateLiquidate() {
       asset_collect: "",
 
       repaySubmittedTxHash : txHash
-    });
+    });// TODO await confirmation
   })
 }
 

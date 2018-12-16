@@ -3,12 +3,7 @@
 	position:relative;
 }
 
-.BalanceLoading {
-	
-}
-
 .BalanceLoading img {
     width: 14px;
     height: auto;
-    margin-left:calc(50% - 6px);
 }

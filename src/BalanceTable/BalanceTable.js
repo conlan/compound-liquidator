@@ -19,14 +19,19 @@ function OnEnableTokenClicked (row) {
 
   var tokenContract = new web3.web3js.eth.Contract(ERC20_ABI, tokenAddress);
 
-
   // approve maximum amount of tokens
   tokenContract.methods.approve(liquidationAddress, new BigNumber(2**(256) - 1).toFixed() ).send(
     { from: web3.account }
   ).on('transactionHash', (txHash) => {
-    console.log(txHash);
+    console.log("Transaction submitted: https://etherscan.io/tx/" + txHash);
+
+    // add token address to pending allowances so it shows up a fetching spinner below
+    app.state.pending_allowances[tokenAddress] = true;
+
+    app.setState({});
   }).on("confirmation", (err, receipt) => {
-    console.log(receipt);
+    // remove key from pending allowances
+    delete app.state.pending_allowances[tokenAddress];
 
     app.state.allowance_states[tokenAddress] = true;
 
@@ -54,10 +59,10 @@ function BalanceTable(props) {
   );
 
   Tokens.tokens.forEach(tokenData => {
-    var isEnabled = false;
+    var isAllowed = false;
 
     if (tokenData.address in app.state.allowance_states) {
-      isEnabled = app.state.allowance_states[tokenData.address];
+      isAllowed = app.state.allowance_states[tokenData.address];
     }
 
     var rowData = {
@@ -67,7 +72,7 @@ function BalanceTable(props) {
       clickable : false,
       disabled : true,
       fetching : false,
-      enabled : isEnabled
+      allowed : isAllowed
     };
 
     var asset = tokenData.address;
@@ -76,6 +81,10 @@ function BalanceTable(props) {
     var tokenDecimals = Math.pow(10, tokenData.decimals);
 
     rowData[balanceType] = "";
+
+    if (asset in app.state.pending_allowances) {
+      rowData.fetching = true;
+    }
 
     if (balanceType === "Borrowed" && asset in app.state.borrow_balances) {
       rowData["Borrowed"] = app.state.borrow_balances[asset];
@@ -181,7 +190,9 @@ function BalanceTable(props) {
       maxWidth: 75,
       className: "center",
       Cell: row => {
-        if (row.original.enabled === false) {
+        if (row.original.fetching) {
+          return <div className="BalanceLoading"><img src="./small-loading.gif"/></div>
+        } else if (row.original.allowed === false) {
           return (<button onClick={() => OnEnableTokenClicked(row)} className="EnableButton">✅</button>)
         } else if (row.original.clickable) {
           return (          
@@ -206,8 +217,6 @@ function BalanceTable(props) {
               }}
             />          
           )
-        } else if (row.original.fetching) {
-          return <div className="BalanceLoading"><img src="./small-loading.gif"/></div>
         } else {
           return <div/>
         }

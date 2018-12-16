@@ -80,6 +80,7 @@ class App extends Component {
       // which balances are currently being requested from server
       pending_balances: {},
 
+      pending_allowances: {},
       allowance_states: {},
 
       // the asset that the user has toggled to repay for the borrow
@@ -89,6 +90,7 @@ class App extends Component {
 
       // holds the submitted liquidation transation hash
       repaySubmittedTxHash : "",
+
       // the discount for liquidating borrows (gets fetched later)
       liquidationDiscount : -1,
 
@@ -96,7 +98,7 @@ class App extends Component {
       liquidateBlocked : true,
 
       currentBlock : ""
-    };
+    };    
   }
 
   componentDidMount() {
