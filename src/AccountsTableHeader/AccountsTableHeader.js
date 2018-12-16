@@ -32,7 +32,7 @@ function AccountsTableHeader(props) {
 
       <div className="CurrentBlock">
         <p className="SameLine">{currentBlockText}</p>
-        <a href={currentBlockLink} target="_blank">
+        <a href={currentBlockLink} target="_blank" rel="noopener noreferrer">
           {props.currentBlock}
         </a>
       </div>

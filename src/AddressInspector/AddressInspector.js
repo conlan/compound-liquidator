@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ReactTable from "react-table";
+// import ReactTable from "react-table";
 import BalanceTable from "../BalanceTable/BalanceTable.js"
 
 import { useWeb3Context } from "web3-react/hooks";
@@ -93,9 +93,9 @@ function AddressInspector (props) {
 
     web3 = useWeb3Context();
 
-    if (accountLiquidity == "") {
+    if (accountLiquidity === "") {
       // only if we're not fetching a pending balance
-      if (Object.keys(app.state.pending_balances).length == 0) {      
+      if (Object.keys(app.state.pending_balances).length === 0) {      
         var compoundAddress = Tokens.moneyMarketAddress;
         var compoundABI = Tokens.moneyMarketABI;
 
@@ -199,7 +199,7 @@ function AddressInspector (props) {
 
         <p className="LiquidationDetails">{liquidationText}</p>
 
-        <p className="TransactionSubmissionDetails">{transactionSubmittedText}<a href={transationSubmittedLink} target="_blank">{transationSubmittedLink}</a></p>
+        <p className="TransactionSubmissionDetails">{transactionSubmittedText}<a href={transationSubmittedLink} rel="noopener noreferrer" target="_blank">{transationSubmittedLink}</a></p>
 
         <div className="ButtonDiv">
           <button className="BackButton" onClick={() => OnBackClicked()}>Back</button>

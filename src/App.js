@@ -11,7 +11,7 @@ import axios from "axios";
 
 import "./App.css";
 
-import sampleJson from "./samplejson.json";
+// import sampleJson from "./samplejson.json";
 
 let web3;
 

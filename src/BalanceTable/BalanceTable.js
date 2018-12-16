@@ -109,8 +109,8 @@ function BalanceTable(props) {
             if (error === null) {
               var newBalances = app.state.borrow_balances;
 
-              var amount = (result / tokenDecimals).toFixed(3);
-              if (amount == 0) {
+              var amount = Number((result / tokenDecimals).toFixed(3));
+              if (amount === 0) {
                 amount = "0";
               }
 
@@ -132,8 +132,8 @@ function BalanceTable(props) {
             if (error === null) {
               var newBalances = app.state.supply_balances;
 
-              var amount = (result / tokenDecimals).toFixed(3);
-              if (amount == 0) {
+              var amount = Number((result / tokenDecimals).toFixed(3));
+              if (amount === 0) {
                 amount = "0";
               }
 
@@ -173,7 +173,7 @@ function BalanceTable(props) {
       Header: "Address",
       accessor: "address",
       Cell: row => (
-        <a href={"https://etherscan.io/address/" + row.value} target="_blank">
+        <a href={"https://etherscan.io/address/" + row.value} target="_blank" rel="noopener noreferrer">
           {row.value}
         </a>
       )
@@ -191,9 +191,9 @@ function BalanceTable(props) {
       className: "center",
       Cell: row => {
         if (row.original.fetching) {
-          return <div className="BalanceLoading"><img src="./small-loading.gif"/></div>
+          return <div className="BalanceLoading"><img alt="loading" src="./small-loading.gif"/></div>
         } else if (row.original.allowed === false) {
-          return (<button onClick={() => OnEnableTokenClicked(row)} className="EnableButton">✅</button>)
+          return (<button onClick={() => OnEnableTokenClicked(row)} className="EnableButton"><span role="img" aria-label="Checkmark">✅</span></button>)
         } else if (row.original.clickable) {
           return (          
             <input

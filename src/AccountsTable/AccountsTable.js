@@ -59,7 +59,7 @@ function AccountsTable(props) {
       accessor: "address",
       maxWidth: 750,
       Cell: row => (
-        <a href={"https://etherscan.io/address/" + row.value} target="_blank">
+        <a href={"https://etherscan.io/address/" + row.value} target="_blank" rel="noopener noreferrer">
           {row.value}
         </a>
       )
@@ -70,7 +70,7 @@ function AccountsTable(props) {
       maxWidth: 200,
       className: "right",
       Cell: row => (
-        <a href={"https://etherscan.io/block/" + row.value} target="_blank">
+        <a href={"https://etherscan.io/block/" + row.value} target="_blank" rel="noopener noreferrer">
           {row.value}
         </a>
       )
@@ -139,7 +139,7 @@ function AccountsTable(props) {
   var showPageSizeOptions = false;
   var defaultPageSize = 15;
 
-  var minRows = defaultPageSize;
+  // var minRows = defaultPageSize;
 
   return (
     <div className="AccountsTable">
@@ -154,15 +154,15 @@ function AccountsTable(props) {
         className="-striped"
       />
       <p>
-        <a href="https://github.com/conlan/compound-liquidator" target="_blank">
+        <a href="https://github.com/conlan/compound-liquidator" target="_blank" rel="noopener noreferrer">
           Github
         </a>{" "}
         |{" "}
-        <a href="https://compound.finance" target="_blank">
+        <a href="https://compound.finance" target="_blank" rel="noopener noreferrer">
           Compound
         </a>{" "}
         |{" "}
-        <a href="https://compound.finance/developers#liquidate" target="_blank">
+        <a href="https://compound.finance/developers#liquidate" target="_blank" rel="noopener noreferrer">
           Documentation
         </a>{" "}
         | Use at your own{" "}
