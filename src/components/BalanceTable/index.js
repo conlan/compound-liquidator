@@ -103,7 +103,7 @@ function BalanceTable(props) {
             if (error === null) {
               var newBalances = app.state.borrow_balances;
 
-              var amount = Number((result / tokenDecimals).toFixed(3));
+              var amount = Number((result / tokenDecimals).toFixed(4));
               if (amount === 0) {
                 amount = "0";
               }
@@ -126,7 +126,7 @@ function BalanceTable(props) {
             if (error === null) {
               var newBalances = app.state.supply_balances;
 
-              var amount = Number((result / tokenDecimals).toFixed(3));
+              var amount = Number((result / tokenDecimals).toFixed(4));
               if (amount === 0) {
                 amount = "0";
               }
