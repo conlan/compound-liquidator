@@ -247,7 +247,7 @@ class App extends Component {
         page_size: 100,
         page_number: 1,
         min_borrow_value_in_eth: {
-          value: "50000000000000000"
+          value: "10000000000000000"
         },
         max_collateral_ratio: {
           value: "5"
