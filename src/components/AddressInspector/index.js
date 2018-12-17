@@ -192,7 +192,7 @@ function AddressInspector (props) {
         canLiquidate = true;
       
         liquidationText = "You can repay up to (~" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
-           app.state.asset_collect + ". (Note: Repaying specific amounts coming soon.)";
+           app.state.asset_collect + ".";
 
         repaySliderDisabled = false;
 

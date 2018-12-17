@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import AccountsTable from "./AccountsTable/AccountsTable.js";
+import AccountsTable from "./components/AccountsTable/index.js";
 import AddressInspector from "./components/AddressInspector/index.js";
 
 import Compound from "./constants/Compound.js"
