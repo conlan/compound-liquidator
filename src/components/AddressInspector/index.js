@@ -1,7 +1,7 @@
 import React from 'react';
 
 // import ReactTable from "react-table";
-import BalanceTable from "../components/BalanceTable/BalanceTable.js"
+import BalanceTable from "../../components/BalanceTable/index.js"
 import { BigNumber } from "bignumber.js";
 
 import { useWeb3Context } from "web3-react/hooks";
@@ -9,7 +9,7 @@ import { useWeb3Context } from "web3-react/hooks";
 import "./AddressInspector.css"
 
 var app;
-var accountLiquidity = "";
+var accountLiquidity = 0;
 var web3;
 
 var maxRepayAmount = 0;
@@ -32,7 +32,7 @@ function OnRepaySliderValueChange() {
 }
 
 function OnRefreshClicked() {
-  accountLiquidity = "";
+  accountLiquidity = 0;
   tokenAddressToBeRepaid = "";
 
   document.getElementById('repaySlider').value = 50;
@@ -55,7 +55,7 @@ function OnRefreshClicked() {
 }
 
 function OnBackClicked() {
-  accountLiquidity = "";
+  accountLiquidity = 0;
   tokenAddressToBeRepaid = "";
   
   app.setState({
@@ -131,14 +131,14 @@ function AddressInspector (props) {
 
     web3 = useWeb3Context();
 
-    if (accountLiquidity === "") {
+    if (accountLiquidity === 0) {
       // only if we're not fetching a pending balance
       if (Object.keys(app.state.pending_balances).length === 0) {
         var compoundContract = new web3.web3js.eth.Contract(app.state.MONEY_MARKET_ABI, app.state.MONEY_MARKET_ADDRESS);
 
-        compoundContract.methods.getAccountLiquidity(app.state.inspected_address).call(function(error, result) {
-          if (error == null) {
-              accountLiquidity = (result / 1e18).toFixed(6);
+        compoundContract.methods.getAccountLiquidity(app.state.inspected_address).call(function(error, result) {          
+          if (error == null) {              
+              accountLiquidity = new BigNumber(result / 1e18);
 
               var liquidateBlocked = (accountLiquidity >= 0);
 
@@ -229,7 +229,7 @@ function AddressInspector (props) {
     }
 
     var accountLiquidityDisplay = "";
-    if (accountLiquidity.length > 0) {
+    if (accountLiquidity !== 0) {
       accountLiquidityDisplay = accountLiquidity + " ETH";
     } else {
       // if account liquidity not set then disable refresh

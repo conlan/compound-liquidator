@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import AccountsTable from "./AccountsTable/AccountsTable.js";
-import AddressInspector from "./AddressInspector/AddressInspector.js";
+import AddressInspector from "./components/AddressInspector/index.js";
 
 import Compound from "./constants/Compound.js"
 import CompoundStaging from "./constants/CompoundStaging.js"
@@ -214,7 +214,7 @@ class App extends Component {
           if (error === null) {
             price = price / tokenDecimals;
 
-            console.log(t.symbol + " " + price);
+            console.log(t.symbol + " = " + price);
             that.state.asset_prices[t.address] = price;
           }
         });
