@@ -22,8 +22,6 @@ function GetIntendedRepayAmount() {
 }
 
 function OnRepaySliderValueChange() {
-  // var repaySlider = document.getElementById('repaySlider');
-
   var liquidationButton = document.getElementById('LiquidateButton');
 
   var repayAmount = GetIntendedRepayAmount();
@@ -145,6 +143,10 @@ function AddressInspector (props) {
               app.setState({
                 liquidateBlocked : liquidateBlocked
               });
+
+              // reset the repay slider to min
+              var repaySlider = document.getElementById('repaySlider');
+              repaySlider.value = repaySlider.min;
             } else {
               console.log(error);
             }
@@ -267,8 +269,9 @@ function AddressInspector (props) {
           <button className="LiquidateButton" disabled={!canLiquidate} id="LiquidateButton"
             onClick={() => InitiateLiquidate()}
           >Repay</button>
-          <input type="range" onInput={() => OnRepaySliderValueChange()} min="0" max="100"
+          <input type="range" onInput={() => OnRepaySliderValueChange()} min={0} max={100}
             className="slider" id="repaySlider" disabled={repaySliderDisabled}/>
+          
         </div>
       </div>
 

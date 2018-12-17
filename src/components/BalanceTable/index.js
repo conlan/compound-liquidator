@@ -197,20 +197,30 @@ function BalanceTable(props) {
               className="LiquidateRadioInput"
               checked={app.state[stateProperty] === row.value}
               disabled={row.original.disabled}
-              onClick={() => {
+              onClick={() => {                
+                // reset the repayment slider position
+                var repaySlider = document.getElementById('repaySlider');
+                repaySlider.value = repaySlider.min;
+
                 if (stateProperty === "asset_repay") {
                   app.setState({
                     asset_repay: row.value
                   });
+
+                  // reset the liquidate button text
+                  document.getElementById('LiquidateButton').innerText = "Repay 0 " + row.value;
                 } else {
                   app.setState({
                     asset_collect: row.value
                   });
+
+                  // reset the liquidate button text if we have an asset to repay set
+                  if (app.state.asset_repay.length > 0) {                    
+                    document.getElementById('LiquidateButton').innerText = "Repay 0 " + app.state.asset_repay;
+                  }
                 }
               }}
-              onChange={() => {
-                
-              }}
+              onChange={() => {}}
             />          
           )
         } else {

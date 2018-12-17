@@ -185,7 +185,6 @@ class App extends Component {
   }
 
   refreshAllowanceStates() {
-    console.log("refresh allowance states");
     // find out how much the liquidation address can spend on user's behalf. If 0 then the token is not "enabled" for liquidation
     let that = this;
 
@@ -214,7 +213,7 @@ class App extends Component {
           if (error === null) {
             price = price / tokenDecimals;
 
-            console.log(t.symbol + " = " + price);
+            // console.log(t.symbol + " = " + price);
             that.state.asset_prices[t.address] = price;
           }
         });
