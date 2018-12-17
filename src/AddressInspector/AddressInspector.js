@@ -22,7 +22,7 @@ function GetIntendedRepayAmount() {
 }
 
 function OnRepaySliderValueChange() {
-  var repaySlider = document.getElementById('repaySlider');
+  // var repaySlider = document.getElementById('repaySlider');
 
   var liquidationButton = document.getElementById('LiquidateButton');
 
@@ -207,7 +207,7 @@ function AddressInspector (props) {
         if (tokenAddressToBeRepaid in app.state.asset_prices) {
           var assetRepayExchangeRate = app.state.asset_prices[tokenAddressToBeRepaid];
 
-          maxRepayAmount = (-accountLiquidity / assetRepayExchangeRate);
+          maxRepayAmount = (maxRepayAmountInEth / assetRepayExchangeRate);
         } else {
           maxRepayAmount = 0;
         }

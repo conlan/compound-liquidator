@@ -13,10 +13,9 @@ function AccountsTableHeader(props) {
   if (props.currentBlock.length > 0) {
     currentBlockText = "Current Block (";
 
-    var networkName = "";
-    if (web3.networkId == app.state.MAIN_NETWORK_ID) {
+    if (web3.networkId === app.state.MAIN_NETWORK_ID) {
       currentBlockText += "Mainnet";
-    } else if (web3.networkId == app.state.STAGING_NETWORK_ID) {
+    } else if (web3.networkId === app.state.STAGING_NETWORK_ID) {
       currentBlockText += "Staging";
     } else {
       currentBlockText += "Unknown";

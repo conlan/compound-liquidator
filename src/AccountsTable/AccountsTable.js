@@ -27,14 +27,14 @@ function AccountsTable(props) {
 
     var ratio = +(supplyAmount / borrowAmount).toFixed(6);
 
-    var minCollateralRatio = 1.5;
-    var riskyCollateralRatio = 2;
+    var minCollateralRatio = app.state.MIN_COLLATERAL_RATIO;
+    var safeCollateralRatio = app.state.SAFE_COLLATERAL_RATIO;
 
     var state = "";
 
     if (ratio < minCollateralRatio) {
       state = "unsafe";
-    } else if (ratio <= riskyCollateralRatio) {
+    } else if (ratio <= safeCollateralRatio) {
       state = "risky";
     } else {
       state = "safe";

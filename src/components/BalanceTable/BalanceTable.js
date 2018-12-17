@@ -143,8 +143,8 @@ function BalanceTable(props) {
       }
     }
 
-    if (("Supplied" in rowData && rowData.Supplied == 0) ||
-      ("Borrowed" in rowData && rowData.Borrowed == 0) ) {      
+    if (("Supplied" in rowData && Number(rowData.Supplied) === 0) ||
+      ("Borrowed" in rowData && Number(rowData.Borrowed) === 0) ) {      
       rowData.clickable = false;
     } else {
       rowData.clickable = true;
@@ -209,7 +209,7 @@ function BalanceTable(props) {
                 }
               }}
               onChange={() => {
-                console.log(row.original.Supplied == 0);
+                
               }}
             />          
           )

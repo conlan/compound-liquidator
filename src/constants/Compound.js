@@ -26,6 +26,10 @@ export default {
       		"decimals" : 18   
       	}
   ],
+
+  minCollateralRatio : 1.5,
+  safeCollateralRatio : 2,
+
   liquidationAddress: "0x1055be4bf7338c7606d9efdcf80593f180ba043e",
   liquidationABI : [{"constant":true,"inputs":[],"name":"moneyMarket","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"targetAccount","type":"address"},{"name":"assetBorrow","type":"address"},{"name":"assetCollateral","type":"address"},{"name":"requestedAmountClose","type":"uint256"}],"name":"liquidateBorrow","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[{"name":"moneyMarket_","type":"address"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"name":"targetAccount","type":"address","indexed":false},{"name":"assetBorrow","type":"address","indexed":false},{"name":"borrowBalanceBefore","type":"uint256","indexed":false},{"indexed":false,"name":"borrowBalanceAccumulated","type":"uint256"},{"indexed":false,"name":"amountRepaid","type":"uint256"},{"indexed":false,"name":"borrowBalanceAfter","type":"uint256"},{"indexed":false,"name":"liquidator","type":"address"},{"indexed":false,"name":"assetCollateral","type":"address"},{"indexed":false,"name":"collateralBalanceBefore","type":"uint256"},{"indexed":false,"name":"collateralBalanceAccumulated","type":"uint256"},{"indexed":false,"name":"amountSeized","type":"uint256"},{"indexed":false,"name":"collateralBalanceAfter","type":"uint256"}],"name":"BorrowLiquidated","type":"event","anonymous":false},{"inputs":[{"indexed":false,"name":"error","type":"uint256"},{"indexed":false,"name":"info","type":"uint256"},{"indexed":false,"name":"detail","type":"uint256"}],"name":"Failure","type":"event","anonymous":false}],
 

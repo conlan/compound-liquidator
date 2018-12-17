@@ -24,7 +24,7 @@ function Web3Setter(props) {
 
     web3 = useWeb3Context();
 
-    if (web3.networkId == app.state.MAIN_NETWORK_ID) {
+    if (web3.networkId === app.state.MAIN_NETWORK_ID) {
       app.state.MONEY_MARKET_ABI = Compound.moneyMarketABI;
       app.state.MONEY_MARKET_ADDRESS = Compound.moneyMarketAddress;
 
@@ -34,7 +34,10 @@ function Web3Setter(props) {
       app.state.LIQUIDATION_ABI = Compound.liquidationABI;
 
       app.state.ETHERSCAN_PREFIX = "https://etherscan.io/";
-    } else if (web3.networkId == app.state.STAGING_NETWORK_ID) {
+
+      app.state.MIN_COLLATERAL_RATIO = Compound.minCollateralRatio;
+      app.state.SAFE_COLLATERAL_RATIO = Compound.safeCollateralRatio;
+    } else if (web3.networkId === app.state.STAGING_NETWORK_ID) {
       app.state.MONEY_MARKET_ABI = CompoundStaging.moneyMarketABI;
       app.state.MONEY_MARKET_ADDRESS = CompoundStaging.moneyMarketAddress;
 
@@ -44,6 +47,9 @@ function Web3Setter(props) {
       app.state.LIQUIDATION_ABI = CompoundStaging.liquidationABI;
 
       app.state.ETHERSCAN_PREFIX = "https://rinkeby.etherscan.io/";
+
+      app.state.MIN_COLLATERAL_RATIO = CompoundStaging.minCollateralRatio;
+      app.state.SAFE_COLLATERAL_RATIO = CompoundStaging.safeCollateralRatio;
     }
 
     app.refreshAccountList();
@@ -146,6 +152,9 @@ class App extends Component {
       LIQUIDATION_ABI : "",
 
       ETHERSCAN_PREFIX : "",
+
+      MIN_COLLATERAL_RATIO : 0,
+      SAFE_COLLATERAL_RATIO : 0
     };   
   }
 
@@ -159,11 +168,11 @@ class App extends Component {
       );
     } else {
    	  // else we're not inspecting an address, check if there's any accounts. if not then show loading gif
-      if (this.state.accounts.length == 0) {
+      if (this.state.accounts.length === 0) {
         return (
           <div>
             <Web3Setter app={this}/>
-            <img src="./loading.gif" className="Loading" />
+            <img alt="Loading" src="./loading.gif" className="Loading" />
           </div>
         );
       } else {
@@ -183,7 +192,7 @@ class App extends Component {
     var compoundContract = new web3.web3js.eth.Contract(this.state.MONEY_MARKET_ABI, this.state.MONEY_MARKET_ADDRESS);
 
     this.state.TOKENS.forEach((t) => {
-      if ((t.address in this.state.allowance_states) == false) {
+      if ((t.address in this.state.allowance_states) === false) {
         
         var tokenContract = new web3.web3js.eth.Contract(ERC20.ABI, t.address);
 
@@ -198,7 +207,7 @@ class App extends Component {
         });
       }
 
-      if ((t.address in this.state.asset_prices) == false) {
+      if ((t.address in this.state.asset_prices) === false) {
         var tokenDecimals = Math.pow(10, t.decimals);
 
         compoundContract.methods.assetPrices(t.address).call(function(error, price) {
