@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/js/4.7a8f7d34.chunk.js"
   },
   {
-    "revision": "19b55f3e607262924ac6",
-    "url": "/compound-liquidator/static/css/main.170bcc85.chunk.css"
+    "revision": "db591cd4c76aeeaa0606",
+    "url": "/compound-liquidator/static/css/main.4871b713.chunk.css"
   },
   {
     "revision": "e05ff4a9cdac561a4d4a",
@@ -16,8 +16,8 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/js/1.ced1c727.chunk.js"
   },
   {
-    "revision": "13625e7644a3a224e4fd",
-    "url": "/compound-liquidator/static/js/7.13625e76.chunk.js"
+    "revision": "3e0310191f1ed4fceb2f",
+    "url": "/compound-liquidator/static/js/7.3e031019.chunk.js"
   },
   {
     "revision": "95a8932b2fd164514daf",
@@ -36,11 +36,11 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/js/5.cf6f11b4.chunk.js"
   },
   {
-    "revision": "19b55f3e607262924ac6",
-    "url": "/compound-liquidator/static/js/main.19b55f3e.chunk.js"
+    "revision": "db591cd4c76aeeaa0606",
+    "url": "/compound-liquidator/static/js/main.db591cd4.chunk.js"
   },
   {
-    "revision": "13625e7644a3a224e4fd",
+    "revision": "3e0310191f1ed4fceb2f",
     "url": "/compound-liquidator/static/css/7.60d091c4.chunk.css"
   },
   {
@@ -68,7 +68,7 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/css/1.53d04195.chunk.css"
   },
   {
-    "revision": "33cb76cf78593a8d56fcda1790b892f8",
+    "revision": "c6443a6d709aec8bda5737610b7b3684",
     "url": "/compound-liquidator/index.html"
   }
 ];
