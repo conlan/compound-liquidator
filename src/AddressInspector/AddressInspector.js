@@ -1,12 +1,10 @@
 import React from 'react';
 
 // import ReactTable from "react-table";
-import BalanceTable from "../BalanceTable/BalanceTable.js"
+import BalanceTable from "../components/BalanceTable/BalanceTable.js"
 import { BigNumber } from "bignumber.js";
 
 import { useWeb3Context } from "web3-react/hooks";
-
-import Tokens from "../constants/Compound.js";
 
 import "./AddressInspector.css"
 
@@ -92,7 +90,7 @@ function InitiateLiquidate() {
 
     var assetCollateral = ""; 
 
-    Tokens.tokens.forEach(t => {
+    app.state.TOKENS.forEach(t => {
       if (t.symbol === app.state.asset_collect) {
         assetCollateral = t.address; // the asset we're collecting is the one that the target collateralized
       }
@@ -109,10 +107,7 @@ function InitiateLiquidate() {
 
     console.log(requestAmountClose);
 
-    var liquidationAddress = Tokens.liquidationAddress;
-    var liquidationABI = Tokens.liquidationABI;
-
-    var compoundContract = new web3.web3js.eth.Contract(liquidationABI, liquidationAddress);
+    var compoundContract = new web3.web3js.eth.Contract(app.state.LIQUIDATION_ABI, app.state.LIQUIDATION_ADDRESS);
 
     compoundContract.methods.liquidateBorrow(targetAccount, assetBorrow, assetCollateral, requestAmountClose).send(
       { from: myAccount }
@@ -138,11 +133,8 @@ function AddressInspector (props) {
 
     if (accountLiquidity === "") {
       // only if we're not fetching a pending balance
-      if (Object.keys(app.state.pending_balances).length === 0) {      
-        var compoundAddress = Tokens.moneyMarketAddress;
-        var compoundABI = Tokens.moneyMarketABI;
-
-        var compoundContract = new web3.web3js.eth.Contract(compoundABI, compoundAddress);
+      if (Object.keys(app.state.pending_balances).length === 0) {
+        var compoundContract = new web3.web3js.eth.Contract(app.state.MONEY_MARKET_ABI, app.state.MONEY_MARKET_ADDRESS);
 
         compoundContract.methods.getAccountLiquidity(app.state.inspected_address).call(function(error, result) {
           if (error == null) {
@@ -176,9 +168,9 @@ function AddressInspector (props) {
     var refreshDisabled = false;
 
     // but check that we have all the borrow balances fetched
-    if ((Object.keys(app.state.borrow_balances).length) < Object.keys(Tokens.tokens).length) {
+    if ((Object.keys(app.state.borrow_balances).length) < Object.keys(app.state.TOKENS).length) {
       refreshDisabled = true;
-    } else if ((Object.keys(app.state.supply_balances).length) < Object.keys(Tokens.tokens).length) {
+    } else if ((Object.keys(app.state.supply_balances).length) < Object.keys(app.state.TOKENS).length) {
       // and all the supply balances fetched. If either of these aren't fully fetched then disable refresh
       refreshDisabled = true;
     }
@@ -203,7 +195,7 @@ function AddressInspector (props) {
         repaySliderDisabled = false;
 
         // find the address for the token that the user has selected to repay
-        Tokens.tokens.forEach(t => {
+        app.state.TOKENS.forEach(t => {
           if (t.symbol === app.state.asset_repay) {
             tokenAddressToBeRepaid = t.address;
           }

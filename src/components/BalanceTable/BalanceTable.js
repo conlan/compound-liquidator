@@ -1,26 +1,23 @@
 import React from "react";
 import ReactTable from "react-table";
 
-import { BigNumber } from "bignumber.js";
-import "./BalanceTable.css";
-
-import Tokens from "../constants/Compound.js";
-
+import BigNumber from "bignumber.js";
 import { useWeb3Context } from "web3-react/hooks";
+
+import ERC20 from "../../constants/ERC20.js"
+
+import "./BalanceTable.css";
 
 let app;
 let web3;
 
 function OnEnableTokenClicked (row) {
-  var liquidationAddress = Tokens.liquidationAddress;
-
   var tokenAddress = row.original.address;
-  var ERC20_ABI = Tokens.erc20ABI;
 
-  var tokenContract = new web3.web3js.eth.Contract(ERC20_ABI, tokenAddress);
+  var tokenContract = new web3.web3js.eth.Contract(ERC20.ABI, tokenAddress);
 
   // approve maximum amount of tokens
-  tokenContract.methods.approve(liquidationAddress, new BigNumber(2**(256) - 1).toFixed() ).send(
+  tokenContract.methods.approve(app.state.LIQUIDATION_ADDRESS, new BigNumber(2**(256) - 1).toFixed() ).send(
     { from: web3.account }
   ).on('transactionHash', (txHash) => {
     console.log("Transaction submitted: https://etherscan.io/tx/" + txHash);
@@ -48,17 +45,14 @@ function BalanceTable(props) {
 
   var data = [];
 
-  var compoundAddress = Tokens.moneyMarketAddress;
-  var compoundABI = Tokens.moneyMarketABI;
-
   web3 = useWeb3Context();
 
   var compoundContract = new web3.web3js.eth.Contract(
-    compoundABI,
-    compoundAddress
+    app.state.MONEY_MARKET_ABI,
+    app.state.MONEY_MARKET_ADDRESS
   );
 
-  Tokens.tokens.forEach(tokenData => {
+  app.state.TOKENS.forEach(tokenData => {
     var isAllowed = false;
 
     if (tokenData.address in app.state.allowance_states) {

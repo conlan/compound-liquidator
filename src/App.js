@@ -3,20 +3,48 @@ import React, { Component } from "react";
 import AccountsTable from "./AccountsTable/AccountsTable.js";
 import AddressInspector from "./AddressInspector/AddressInspector.js";
 
-import { useWeb3Context } from "web3-react/hooks";
+import Compound from "./constants/Compound.js"
+import CompoundStaging from "./constants/CompoundStaging.js"
 
-import Tokens from "./constants/Compound.js"
+import ERC20 from "./constants/ERC20.js"
 
 import axios from "axios";
+
+import { useWeb3Context } from "web3-react/hooks";
 
 import "./App.css";
 
 // import sampleJson from "./samplejson.json";
 
-let web3;
+let web3 = null;
 
-function Web3Setter(props) {
-  web3 = useWeb3Context();
+function Web3Setter(props) {  
+  if (web3 === null) {
+    var app = props.app;
+
+    web3 = useWeb3Context();
+
+    if (web3.networkId == app.state.MAIN_NETWORK_ID) {
+      app.state.MONEY_MARKET_ABI = Compound.moneyMarketABI;
+      app.state.MONEY_MARKET_ADDRESS = Compound.moneyMarketAddress;
+
+      app.state.TOKENS = Compound.tokens;
+
+      app.state.LIQUIDATION_ADDRESS = Compound.liquidationAddress;
+      app.state.LIQUIDATION_ABI = Compound.liquidationABI;
+    } else if (web3.networkId == app.state.STAGING_NETWORK_ID) {
+      app.state.MONEY_MARKET_ABI = CompoundStaging.moneyMarketABI;
+      app.state.MONEY_MARKET_ADDRESS = CompoundStaging.moneyMarketAddress;
+
+      app.state.TOKENS = CompoundStaging.tokens;
+
+      app.state.LIQUIDATION_ADDRESS = CompoundStaging.liquidationAddress;
+      app.state.LIQUIDATION_ABI = CompoundStaging.liquidationABI;
+    }
+
+    app.refreshAccountList();
+    app.refreshAllowanceStates();
+  }
 
   return (<div/>)
 }
@@ -99,18 +127,23 @@ class App extends Component {
       // whether the user can choose assets on the address inspect. Blocked by default unless that account has a negative account liquidity
       liquidateBlocked : true,
 
-      currentBlock : ""
-    };    
+      currentBlock : "",
+
+      // CONSTANTS
+      MAIN_NETWORK_ID : 1,
+      STAGING_NETWORK_ID : 4,
+
+      MONEY_MARKET_ADDRESS : "",
+      MONEY_MARKET_ABI : "",
+
+      TOKENS : [],
+
+      LIQUIDATION_ADDRESS : "",
+      LIQUIDATION_ABI : ""
+    };   
   }
 
-  componentDidMount() {
-  	// if we don't have any accounts then fetch them
-    if (this.state.accounts.length == 0) {
-      this.refreshAccountList();
-    }
-
-    this.refreshAllowanceAmounts();
-  }
+  componentDidMount() {}
 
   render() {
   	// if we're inspecting an address
@@ -123,7 +156,7 @@ class App extends Component {
       if (this.state.accounts.length == 0) {
         return (
           <div>
-            <Web3Setter/>
+            <Web3Setter app={this}/>
             <img src="./loading.gif" className="Loading" />
           </div>
         );
@@ -136,21 +169,19 @@ class App extends Component {
     }
   }
 
-  refreshAllowanceAmounts() {
+  refreshAllowanceStates() {
+    console.log("refresh allowance states");
     // find out how much the liquidation address can spend on user's behalf. If 0 then the token is not "enabled" for liquidation
-    var liquidationAddress = Tokens.liquidationAddress;
-    var ERC20_ABI = Tokens.erc20ABI;
-
     let that = this;
 
-    var compoundContract = new web3.web3js.eth.Contract(Tokens.moneyMarketABI, Tokens.moneyMarketAddress);
+    var compoundContract = new web3.web3js.eth.Contract(this.state.MONEY_MARKET_ABI, this.state.MONEY_MARKET_ADDRESS);
 
-    Tokens.tokens.forEach((t) => {
+    this.state.TOKENS.forEach((t) => {
       if ((t.address in this.state.allowance_states) == false) {
         
-        var tokenContract = new web3.web3js.eth.Contract(ERC20_ABI, t.address);
+        var tokenContract = new web3.web3js.eth.Contract(ERC20.ABI, t.address);
 
-        tokenContract.methods.allowance(web3.account, liquidationAddress).call(function(error, allowance) {
+        tokenContract.methods.allowance(web3.account, this.state.LIQUIDATION_ADDRESS).call(function(error, allowance) {
           if (error === null) {
             if (allowance > 0) {
               that.state.allowance_states[t.address] = true;
@@ -179,11 +210,15 @@ class App extends Component {
   refreshAccountList() {
   	// TESTING
     // ParseAccountDataResponse(sampleJson, this);
+    var URL = null;
 
-    var URL = "https://api.compound.finance/api/risk/v1/get_account_values";
-
-    // STAGING TODO detect and using appropriate server automatically
-    // var URL = "https://api.stage.compound.finance/api/risk/v1/get_account_values";
+    if (web3.networkId === this.state.MAIN_NETWORK_ID) {
+      // mainnet
+      URL = "https://api.compound.finance/api/risk/v1/get_account_values";
+    } else if (web3.networkId === this.state.STAGING_NETWORK_ID) {
+      // Staging 
+      URL = "https://api.stage.compound.finance/api/risk/v1/get_account_values";
+    }
 
     axios({
       method: "post",
