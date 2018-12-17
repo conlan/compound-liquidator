@@ -53,13 +53,15 @@ function AccountsTable(props) {
     data.push(accountObj);
   });
 
+  var etherScanPrefix = app.state.ETHERSCAN_PREFIX;
+
   const columns = [
     {
       Header: "Address",
       accessor: "address",
       maxWidth: 750,
       Cell: row => (
-        <a href={"https://etherscan.io/address/" + row.value} target="_blank" rel="noopener noreferrer">
+        <a href={etherScanPrefix + "address/" + row.value} target="_blank" rel="noopener noreferrer">
           {row.value}
         </a>
       )
@@ -70,7 +72,7 @@ function AccountsTable(props) {
       maxWidth: 200,
       className: "right",
       Cell: row => (
-        <a href={"https://etherscan.io/block/" + row.value} target="_blank" rel="noopener noreferrer">
+        <a href={etherScanPrefix + "block/" + row.value} target="_blank" rel="noopener noreferrer">
           {row.value}
         </a>
       )

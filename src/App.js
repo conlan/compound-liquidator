@@ -32,6 +32,8 @@ function Web3Setter(props) {
 
       app.state.LIQUIDATION_ADDRESS = Compound.liquidationAddress;
       app.state.LIQUIDATION_ABI = Compound.liquidationABI;
+
+      app.state.ETHERSCAN_PREFIX = "https://etherscan.io/";
     } else if (web3.networkId == app.state.STAGING_NETWORK_ID) {
       app.state.MONEY_MARKET_ABI = CompoundStaging.moneyMarketABI;
       app.state.MONEY_MARKET_ADDRESS = CompoundStaging.moneyMarketAddress;
@@ -40,6 +42,8 @@ function Web3Setter(props) {
 
       app.state.LIQUIDATION_ADDRESS = CompoundStaging.liquidationAddress;
       app.state.LIQUIDATION_ABI = CompoundStaging.liquidationABI;
+
+      app.state.ETHERSCAN_PREFIX = "https://rinkeby.etherscan.io/";
     }
 
     app.refreshAccountList();
@@ -139,7 +143,9 @@ class App extends Component {
       TOKENS : [],
 
       LIQUIDATION_ADDRESS : "",
-      LIQUIDATION_ABI : ""
+      LIQUIDATION_ABI : "",
+
+      ETHERSCAN_PREFIX : "",
     };   
   }
 

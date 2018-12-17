@@ -6,7 +6,7 @@ function AccountsTableHeader(props) {
   var app = props.app;
 
   var currentBlockText = ""
-  var currentBlockLink = "https://etherscan.io/block/" + props.currentBlock;
+  var currentBlockLink = app.state.ETHERSCAN_PREFIX + "block/" + props.currentBlock;
 
   var web3 = useWeb3Context();
 

@@ -20,7 +20,7 @@ function OnEnableTokenClicked (row) {
   tokenContract.methods.approve(app.state.LIQUIDATION_ADDRESS, new BigNumber(2**(256) - 1).toFixed() ).send(
     { from: web3.account }
   ).on('transactionHash', (txHash) => {
-    console.log("Transaction submitted: https://etherscan.io/tx/" + txHash);
+    console.log("Transaction submitted: " + app.state.ETHERSCAN_PREFIX + "tx/" + txHash);
 
     // add token address to pending allowances so it shows up a fetching spinner below
     app.state.pending_allowances[tokenAddress] = true;
@@ -157,6 +157,8 @@ function BalanceTable(props) {
 
   // console.log(data);
 
+  var etherScanPrefix = app.state.ETHERSCAN_PREFIX;
+
   var columns = [
     {
       Header: "Symbol",
@@ -167,7 +169,7 @@ function BalanceTable(props) {
       Header: "Address",
       accessor: "address",
       Cell: row => (
-        <a href={"https://etherscan.io/address/" + row.value} target="_blank" rel="noopener noreferrer">
+        <a href={etherScanPrefix + "address/" + row.value} target="_blank" rel="noopener noreferrer">
           {row.value}
         </a>
       )

@@ -218,7 +218,7 @@ function AddressInspector (props) {
 
     if (app.state.repaySubmittedTxHash.length > 0) {
       transactionSubmittedText = "Repay submitted! View your tx: "
-      transationSubmittedLink = "https://etherscan.io/tx/" + app.state.repaySubmittedTxHash;      
+      transationSubmittedLink = app.state.ETHERSCAN_PREFIX + "tx/" + app.state.repaySubmittedTxHash;      
     }
 
     var liquidationDiscountDisplay = "";
