@@ -130,10 +130,10 @@ function AddressInspector (props) {
     web3 = useWeb3Context();
 
     if (accountLiquidity === 0) {
-      // only if we're not fetching a pending balance
-      if (Object.keys(app.state.pending_balances).length === 0) {
-        var compoundContract = new web3.web3js.eth.Contract(app.state.MONEY_MARKET_ABI, app.state.MONEY_MARKET_ADDRESS);
+      var compoundContract = new web3.web3js.eth.Contract(app.state.MONEY_MARKET_ABI, app.state.MONEY_MARKET_ADDRESS);
 
+      // only if we're not fetching a pending balance
+      if (Object.keys(app.state.pending_balances).length === 0) {      
         compoundContract.methods.getAccountLiquidity(app.state.inspected_address).call(function(error, result) {          
           if (error == null) {              
               accountLiquidity = new BigNumber(result / 1e18);
