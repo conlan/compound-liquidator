@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/js/4.7a8f7d34.chunk.js"
   },
   {
-    "revision": "3e95a3359ff9df24dcd2",
+    "revision": "4ad6b3829bcd5d5d28ff",
     "url": "/compound-liquidator/static/css/main.111691a4.chunk.css"
   },
   {
@@ -36,8 +36,8 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/js/5.cf6f11b4.chunk.js"
   },
   {
-    "revision": "3e95a3359ff9df24dcd2",
-    "url": "/compound-liquidator/static/js/main.3e95a335.chunk.js"
+    "revision": "4ad6b3829bcd5d5d28ff",
+    "url": "/compound-liquidator/static/js/main.4ad6b382.chunk.js"
   },
   {
     "revision": "3e0310191f1ed4fceb2f",
@@ -68,7 +68,7 @@ self.__precacheManifest = [
     "url": "/compound-liquidator/static/css/1.53d04195.chunk.css"
   },
   {
-    "revision": "81261cf143e049ff5fbe1edf5e5d0a15",
+    "revision": "efe7dd72b6285fecd86ac790274ae88a",
     "url": "/compound-liquidator/index.html"
   }
 ];
