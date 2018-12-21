@@ -91,7 +91,12 @@ function ParseAccountDataResponse(json, app) {
       var urlParams = new URLSearchParams(window.location.search);
 
       if (urlParams.has("address")) {
-        inspectedAddressParam = urlParams.get("address");
+        var addressInput = urlParams.get("address");
+        
+        // validate the address input before assuming it's a valid address
+        if (web3.web3js.utils.isAddress(addressInput)) {
+          inspectedAddressParam = addressInput;
+        }
       }
     }
   } catch (e) {
