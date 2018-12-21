@@ -84,14 +84,18 @@ function ParseAccountDataResponse(json, app) {
   });
 
   var inspectedAddressParam = "";
-  // check for URL Search Params support
-  if ("URLSearchParams" in window) {
-    // extract factory token from URL if found
-    var urlParams = new URLSearchParams(window.location.search);
+  try {
+    // check for URL Search Params support
+    if ("URLSearchParams" in window) {
+      // extract factory token from URL if found
+      var urlParams = new URLSearchParams(window.location.search);
 
-    if (urlParams.has("address")) {
-      inspectedAddressParam = urlParams.get("address");
+      if (urlParams.has("address")) {
+        inspectedAddressParam = urlParams.get("address");
+      }
     }
+  } catch (e) {
+    console.log(e);
   }
 
   app.setState({
@@ -199,7 +203,7 @@ class App extends Component {
           if (error === null) {
             if (allowance > 0) {
               that.state.allowance_states[t.address] = true;
-              
+
               that.setState({});
             }
           }
