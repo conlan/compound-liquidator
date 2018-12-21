@@ -73,6 +73,25 @@ function OnBackClicked() {
   });
 }
 
+function OnCopyAddressClicked() {
+  // build the URL we want to copy
+  var url = "https://conlan.github.io/compound-liquidator?address=" + app.state.inspected_address;
+
+  // hack to copy text to clipboard
+  const el = document.createElement('textarea');
+  el.value = url;
+  el.setAttribute('readonly', '');
+  el.style.position = 'absolute';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+
+  // tell the user what happened
+  window.alert("\"" + url + "\" copied to clipboard.");
+}
+
 function InitiateLiquidate() {
   var requestAmountClose = GetIntendedRepayAmount();
 
@@ -246,7 +265,8 @@ function AddressInspector (props) {
     return (
       <div className="AddressInspector">
         <div>
-          <p className="SameLine"><b>Address:</b> <i>{app.state.inspected_address}</i></p>
+          <p className="SameLine"><b>Address:</b> <i>{app.state.inspected_address} </i></p>
+          <button onClick={() => OnCopyAddressClicked()}><img className="CopyButton" alt="copy" src="./copy.png"/></button>
 
           <button className="RefreshButton" onClick={() => OnRefreshClicked()} disabled={refreshDisabled}>Refresh</button>
         </div>

@@ -3,6 +3,11 @@
 	width:calc(100% - 40px);
 }
 
+.CopyButton {
+	padding-top:2px;
+    width: 10px;
+}
+
 .ButtonDiv {
 	width:100%;
 
