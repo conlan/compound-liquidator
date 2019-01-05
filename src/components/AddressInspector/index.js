@@ -22,11 +22,41 @@ function GetIntendedRepayAmount() {
 }
 
 function OnRepaySliderValueChange() {
-  var liquidationButton = document.getElementById('LiquidateButton');
-
+  // update the liquidation button text
   var repayAmount = GetIntendedRepayAmount();
 
+  var liquidationButton = document.getElementById('LiquidateButton');
+
   liquidationButton.innerText = "Repay " + repayAmount + " " + app.state.asset_repay;
+
+  // update the estimated collection amount text
+  var assetCollateralAddress = null;
+
+  // first determine which asset the user will be collecting
+  app.state.TOKENS.forEach(t => {
+    if (t.symbol === app.state.asset_collect) {
+      assetCollateralAddress = t.address;
+    }
+  });
+
+  if (assetCollateralAddress !== null) {
+    // first take the repay amount and convert to eth
+    var assetRepayExchangeRate = app.state.asset_prices[tokenAddressToBeRepaid];
+    // factor in the liquidation discount amount
+    var estimatedCollectionAmountInEth = (repayAmount * assetRepayExchangeRate) * (1 + app.state.liquidationDiscount);
+
+    console.log(assetRepayExchangeRate);
+    // then get the exchange rate for the collection asset
+    var assetCollectExchangeRate = app.state.asset_prices[assetCollateralAddress];
+    // console.log(assetCollectExchangeRate);
+    // and determine how much the user will receive in the collection asset
+    var estimatedCollectionAmountInAsset = (estimatedCollectionAmountInEth / assetCollectExchangeRate).toFixed(4);
+    // update the text object
+    var liduidationDetailsText = document.getElementById('LiquidationDetailsText');
+
+    liduidationDetailsText.innerText = "You will collect an (estimated) ~" + estimatedCollectionAmountInAsset + " " + 
+      app.state.asset_collect + ".";
+  }  
 }
 
 function OnRefreshClicked() {
@@ -36,6 +66,8 @@ function OnRefreshClicked() {
   document.getElementById('repaySlider').value = 50;
 
   document.getElementById('LiquidateButton').innerText = "Repay";
+
+  document.getElementById('LiquidationDetailsText').innerText = ".";
 
   app.setState({
     borrow_balances : {},
@@ -198,7 +230,7 @@ function AddressInspector (props) {
 
     var canLiquidate = false;
     
-    var liquidationText = "";
+    var liquidationText = ".";
 
     var transactionSubmittedText = "";
     var transationSubmittedLink = "";
@@ -209,9 +241,6 @@ function AddressInspector (props) {
     if ((app.state.asset_repay.length > 0) && (app.state.asset_collect.length > 0)) {
       if (app.state.asset_repay !== app.state.asset_collect) {
         canLiquidate = true;
-      
-        liquidationText = "You can repay up to (~" + -accountLiquidity + " ETH) worth of " + app.state.asset_repay + " to receive discounted " +
-           app.state.asset_collect + ".";
 
         repaySliderDisabled = false;
 
@@ -233,7 +262,7 @@ function AddressInspector (props) {
           maxRepayAmount = 0;
         }
       } else {
-        liquidationText = "Unable to repay " + app.state.asset_repay + " for same asset " + app.state.asset_collect + ".";
+        liquidationText = "Unable to repay " + app.state.asset_repay + " and collect same asset " + app.state.asset_collect + ".";
       }
     }
 
@@ -273,13 +302,13 @@ function AddressInspector (props) {
         <p><b>Account Liquidity:</b> {accountLiquidityDisplay}</p>
         <span><p><b>State: </b><span style={{color:stateColor}}>&#x25cf;</span> {stateText}</p></span>
         
-        <p>Choose an asset to receive at {liquidationDiscountDisplay}% discount:</p> 
+        <p>Choose an asset to collect at {liquidationDiscountDisplay}% discount:</p> 
         <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>        
 
         <p>Choose a different asset to repay on behalf of borrower to return their <b>Account Liquidity</b> to 0:</p>
         <BalanceTable app={app} balanceType="Borrowed" stateProperty="asset_repay"/>
 
-        <p className="LiquidationDetails">{liquidationText}</p>
+        <p className="LiquidationDetails" id="LiquidationDetailsText">{liquidationText}</p>
 
         <p className="TransactionSubmissionDetails">{transactionSubmittedText}<a href={transationSubmittedLink} rel="noopener noreferrer" target="_blank">{transationSubmittedLink}</a></p>
 
