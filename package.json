@@ -8,9 +8,9 @@
     "bignumber.js": "^8.0.1",
     "react": "^16.7.0-alpha.0",
     "react-dom": "^16.7.0-alpha.0",
-    "react-scripts": "2.1.1",
+    "react-scripts": "^2.1.3",
     "react-table": "^6.8.6",
-    "web3": "^1.0.0-beta.36",
+    "web3": "^1.0.0-beta.37",
     "web3-react": "^1.1.1"
   },
   "scripts": {
