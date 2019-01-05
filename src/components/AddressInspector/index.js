@@ -44,8 +44,6 @@ function OnRepaySliderValueChange() {
     var assetRepayExchangeRate = app.state.asset_prices[tokenAddressToBeRepaid];
     // factor in the liquidation discount amount
     var estimatedCollectionAmountInEth = (repayAmount * assetRepayExchangeRate) * (1 + app.state.liquidationDiscount);
-
-    console.log(assetRepayExchangeRate);
     // then get the exchange rate for the collection asset
     var assetCollectExchangeRate = app.state.asset_prices[assetCollateralAddress];
     // console.log(assetCollectExchangeRate);
@@ -161,6 +159,9 @@ function InitiateLiquidate() {
     compoundContract.methods.liquidateBorrow(targetAccount, assetBorrow, assetCollateral, requestAmountClose).send(
       { from: myAccount }
     ).on('transactionHash', (txHash) => {
+      // clear out the estimated collection liquidation details
+      document.getElementById('LiquidationDetailsText').innerText = ".";
+
       app.setState({
         asset_repay: "",
         asset_collect: "",
@@ -232,8 +233,9 @@ function AddressInspector (props) {
     
     var liquidationText = ".";
 
-    var transactionSubmittedText = "";
+    var transactionSubmittedText = "";    
     var transationSubmittedLink = "";
+    var transactionSpinnerVisibility = 'hidden';
 
     var repaySliderDisabled = true;
 
@@ -258,6 +260,9 @@ function AddressInspector (props) {
           var assetRepayExchangeRate = app.state.asset_prices[tokenAddressToBeRepaid];
 
           maxRepayAmount = (maxRepayAmountInEth / assetRepayExchangeRate);
+
+          // factor in the borrower's balance as the max repay amount too (can't pay more than they borrowed!)
+          maxRepayAmount = Math.min(maxRepayAmount, app.state.borrow_balances[tokenAddressToBeRepaid]);
         } else {
           maxRepayAmount = 0;
         }
@@ -268,7 +273,10 @@ function AddressInspector (props) {
 
     if (app.state.repaySubmittedTxHash.length > 0) {
       transactionSubmittedText = "Repay submitted! View your tx: "
-      transationSubmittedLink = app.state.ETHERSCAN_PREFIX + "tx/" + app.state.repaySubmittedTxHash;      
+      transationSubmittedLink = app.state.ETHERSCAN_PREFIX + "tx/" + app.state.repaySubmittedTxHash;
+
+      // show the spinner
+      transactionSpinnerVisibility = 'visible';
     }
 
     var liquidationDiscountDisplay = "";
@@ -306,11 +314,9 @@ function AddressInspector (props) {
         <BalanceTable app={app} balanceType="Supplied" stateProperty="asset_collect"/>        
 
         <p>Choose a different asset to repay on behalf of borrower to return their <b>Account Liquidity</b> to 0:</p>
+        
         <BalanceTable app={app} balanceType="Borrowed" stateProperty="asset_repay"/>
-
-        <p className="LiquidationDetails" id="LiquidationDetailsText">{liquidationText}</p>
-
-        <p className="TransactionSubmissionDetails">{transactionSubmittedText}<a href={transationSubmittedLink} rel="noopener noreferrer" target="_blank">{transationSubmittedLink}</a></p>
+        <br/>
 
         <div className="ButtonDiv">
           <button className="BackButton" onClick={() => OnBackClicked()}>Back</button>
@@ -318,9 +324,17 @@ function AddressInspector (props) {
           <button className="LiquidateButton" disabled={!canLiquidate} id="LiquidateButton"
             onClick={() => InitiateLiquidate()}
           >Repay</button>
+
           <input type="range" onInput={() => OnRepaySliderValueChange()} min={0} max={100}
             className="slider" id="repaySlider" disabled={repaySliderDisabled}/>
           
+        </div>
+
+        <p className="LiquidationDetails" id="LiquidationDetailsText">{liquidationText}</p>
+   
+        <div className="TransactionPendingDiv">          
+          <p className="TransactionSubmissionDetails">{transactionSubmittedText}<a href={transationSubmittedLink} 
+              rel="noopener noreferrer" target="_blank">{transationSubmittedLink}</a> <img style={{visibility:transactionSpinnerVisibility}} alt="loading" src="./small-loading.gif"/></p>
         </div>
       </div>
 
