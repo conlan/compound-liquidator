@@ -30,6 +30,10 @@ function AccountsTable(props) {
     var minCollateralRatio = app.state.MIN_COLLATERAL_RATIO;
     var safeCollateralRatio = app.state.SAFE_COLLATERAL_RATIO;
 
+    // calculate the account liquidity
+
+    var accountLiquidity = (supplyAmount - (app.state.MIN_COLLATERAL_RATIO * borrowAmount)).toFixed(6);
+
     var state = "";
 
     if (ratio < minCollateralRatio) {
@@ -46,6 +50,7 @@ function AccountsTable(props) {
       address: account.address,
       supply: supplyAmount,
       borrow: borrowAmount,
+      accountLiquidity:accountLiquidity,
       ratio: ratioDisplay,
       state: state,
       block: account.blockUpdated
@@ -59,7 +64,7 @@ function AccountsTable(props) {
     {
       Header: "Address",
       accessor: "address",
-      maxWidth: 750,
+      maxWidth: 500,
       Cell: row => (
         <a href={etherScanPrefix + "address/" + row.value} target="_blank" rel="noopener noreferrer">
           {row.value}
@@ -80,19 +85,25 @@ function AccountsTable(props) {
     {
       Header: "Supply",
       accessor: "supply",
-      maxWidth: 200,
+      maxWidth: 150,
       className: "right"
     },
     {
       Header: "Borrow",
       accessor: "borrow",
-      maxWidth: 200,
+      maxWidth: 150,
       className: "right"
     },
     {
       Header: "Ratio",
       accessor: "ratio",
-      maxWidth: 200,
+      maxWidth: 150,
+      className: "right"
+    },
+    {
+      Header: "Account Liquidity",
+      accessor: "accountLiquidity",
+      maxWidth: 150,
       className: "right"
     },
     {
