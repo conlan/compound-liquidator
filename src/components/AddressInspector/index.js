@@ -39,7 +39,9 @@ function OnRepaySliderValueChange() {
     }
   });
 
-  if (assetCollateralAddress !== null) {
+  var liduidationDetailsText = document.getElementById('LiquidationDetailsText');
+
+  if ((assetCollateralAddress !== null) && (repayAmount > 0)) {
     // first take the repay amount and convert to eth
     var assetRepayExchangeRate = app.state.asset_prices[tokenAddressToBeRepaid];
     // factor in the liquidation discount amount
@@ -48,13 +50,17 @@ function OnRepaySliderValueChange() {
     var assetCollectExchangeRate = app.state.asset_prices[assetCollateralAddress];
     // console.log(assetCollectExchangeRate);
     // and determine how much the user will receive in the collection asset
-    var estimatedCollectionAmountInAsset = (estimatedCollectionAmountInEth / assetCollectExchangeRate).toFixed(4);
-    // update the text object
-    var liduidationDetailsText = document.getElementById('LiquidationDetailsText');
+    var estimatedCollectionAmountInAsset = (estimatedCollectionAmountInEth / assetCollectExchangeRate).toFixed(6);
+      
+    // the exchange rate between the asset that we're repaying / collecting
+    var repayForCollectExchangeRate = (repayAmount / estimatedCollectionAmountInAsset).toFixed(4);
 
     liduidationDetailsText.innerText = "You will collect an (estimated) ~" + estimatedCollectionAmountInAsset + " " + 
-      app.state.asset_collect + ".";
-  }  
+      app.state.asset_collect + ". (Rate = " + repayForCollectExchangeRate + " " + app.state.asset_repay + "/" +
+      app.state.asset_collect + ")";
+  } else {
+    liduidationDetailsText.innerText = ".";
+  }
 }
 
 function OnRefreshClicked() {
