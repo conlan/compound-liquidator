@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/compound-liquidator/precache-manifest.91ad52fdbbd2ee01fde1f829ce8f49d3.js"
+  "/compound-liquidator/precache-manifest.b48bd7cba4fe3b89295e157e37ad2550.js"
 );
 
 workbox.clientsClaim();
