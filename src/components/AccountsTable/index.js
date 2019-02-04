@@ -48,12 +48,12 @@ function AccountsTable(props) {
 
     var accountObj = {
       address: account.address,
-      supply: supplyAmount,
-      borrow: borrowAmount,
-      accountLiquidity:accountLiquidity,
+      supply: Number(supplyAmount),
+      borrow: Number(borrowAmount),
+      accountLiquidity: Number(accountLiquidity),
       ratio: ratioDisplay,
       state: state,
-      block: account.blockUpdated
+      block: Number(account.blockUpdated)
     };
     data.push(accountObj);
   });

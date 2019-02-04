@@ -259,7 +259,7 @@ class App extends Component {
           value: "10000000000000000"
         },
         max_collateral_ratio: {
-          value: "5"
+          value: "10"
         }
       }
     }).then(response => {
