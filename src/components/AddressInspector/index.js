@@ -182,6 +182,18 @@ function InitiateLiquidate() {
   }
 }
 
+function GetInspectedAccount() {
+	var inspected_account = null;
+
+    app.state.accounts.forEach(account => {
+    	if (account.address.toLowerCase() == app.state.inspected_address.toLowerCase()) {
+    		inspected_account = account;
+    	}
+   	});
+
+   	return inspected_account;
+}
+
 function AddressInspector (props) { 
     app = props.app;
 
@@ -259,8 +271,12 @@ function AddressInspector (props) {
           }
         });
 
-        // calculate the maximum amount that the user can repay
-        var maxRepayAmountInEth = -accountLiquidity;
+        // calculate the maximum amount that the user can liquidate
+        var inspected_account = GetInspectedAccount();
+        // we can actually liquidate more than just their account liquidity since after seizing assets from their supply, the account's ratio will go under 1.5x and so forth. 
+        // this determines the maximum amount that we can seize in 1 liquidation
+        var maxRepayAmountInEth = ((app.state.MIN_COLLATERAL_RATIO * inspected_account.totalEthBorrow) - inspected_account.totalEthSupply) / (app.state.MIN_COLLATERAL_RATIO - app.state.liquidationDiscount - 1);
+        maxRepayAmountInEth /= 1e18; // convert from wei
 
         if (tokenAddressToBeRepaid in app.state.asset_prices) {
           var assetRepayExchangeRate = app.state.asset_prices[tokenAddressToBeRepaid];
